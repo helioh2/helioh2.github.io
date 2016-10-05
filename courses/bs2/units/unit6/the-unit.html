@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><title>Unit 6: Key Events</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="pretty-printing.css" title="default"/><link rel="stylesheet" type="text/css" href="codemirror.css" title="default"/><link rel="stylesheet" type="text/css" href="bootstrap.css" title="default"/><link rel="stylesheet" type="text/css" href="textbook.css" title="default"/><link rel="stylesheet" type="text/css" href="extra_curriculum.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="codemirror.js"></script><script type="text/javascript" src="runmode.js"></script><script type="text/javascript" src="scheme2.js"></script><script type="text/javascript" src="bootstraplesson.js"></script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2Chttp%3A%2F%2Fwww.cs.wpi.edu%2F%7Ekfisler%2Fmathjaxlocal.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;">&bull;</td><td></td><td><a href="" class="tocviewselflink" data-pltdoc="x">Unit 6:<span class="mywbr"> &nbsp;</span> Key Events</a></td></tr></table></div></div></div><div class="tocsub"><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber"></span><a href="#%28part._.Unit_6__.Key_.Events%29" class="tocsubseclink" data-pltdoc="x">Unit 6:<span class="mywbr"> &nbsp;</span> Key Events</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><a name="(part._.Unit_6__.Key_.Events)"></a><p><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><noscript></noscript><script type="text/javascript" src="easyXDM.min.js"></script><noscript></noscript><script type="text/javascript" src="json2.min.js"></script><noscript></noscript><script type="text/javascript" src="bootstrap-helpers.js"></script><noscript></noscript></p><div class="headercontent"><span class="BootstrapTitle"><img src="pict.png" alt="image" width="150" height="150"/><span class="TitleUnitNum">Unit 6</span>Key Events</span></div><div class="SubFlow" id="overviewDescr"><span class="BootstrapHeader">Unit Overview</span><p>Students return to the subject of partial functions, this time defining a key-event handler that modifies their world when certain keys are pressed.</p></div><blockquote class="OverviewBoundary"><iframe id="forum_embed"></iframe><div class="summary"><div class="" id="BootstrapAgenda"><p>Agenda</p><ul class="BootstrapAgendaList"><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">15 min</span><a href="#lesson_Introduction14087"><span class="BSLessonName">Introduction</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">35 min</span><a href="#lesson_Keypress14088"><span class="BSLessonName">Keypress</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">35 min</span><a href="#lesson_Keypresses%20in%20Your%20Game14089"><span class="BSLessonName">Keypresses in Your Game</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Closing14090"><span class="BSLessonName">Closing</span></a></p></li></ul></div><div id="ProductOutcomes" class=" "><span class="BootstrapHeader">Product Outcomes:</span><ul></ul></div><div id="LearningObjectives" class=" "><span class="BootstrapHeader">Standards and Evidence Statements:</span><p>Standards with prefix BS are specific to Bootstrap; others are from the Common Core. Mouse over each standard to see its corresponding evidence statements. Our <a href="../../../../Standards.shtml">Standards Document</a> shows which units cover each standard. </p><ul class="LearningObjectivesList"></ul></div><span class="BootstrapHeader">Length: 90 minutes</span><div id="Glossary" class=" "><span class="BootstrapHeader">Glossary:</span><ul><li><p><span class="vocab">clause</span>: a question and its corresponding answer in a conditional expression</p></li><li><p><span class="vocab">conditionals</span></p></li><li><p><span class="vocab">piecewise function</span>: a function that computes different expressions based on its input</p></li><li><p><span class="vocab">variable</span></p></li></ul></div><div id="Materials" class=" "><span class="BootstrapHeader">Materials:</span><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>Signs for kids, entitled "update-world", "draw-world" and "big-bang"</p></li><li><p>Cutout images of the dog and ruby</p></li></ul></div><div id="Preparation" class=" "><span class="BootstrapHeader">Preparation:</span><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li><li><p>The Ninja World 3 file [NW3.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=t77yPXKDWs &amp;" target="embedded">WeScheme</a> projected onto the board</p></li></ul></div><div id="LanguageTable" class=" "><table cellspacing="0" cellpadding="0" class="thetable"><tr><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Types</p></td><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Functions</p></td></tr><tr><td align="center" class="BootstrapTable"><p>Number</p></td><td align="center" class="BootstrapTable"><p><tt>+ - * / sq sqrt expt</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>String</p></td><td align="center" class="BootstrapTable"><p><tt>string-append string-length</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Image</p></td><td align="center" class="BootstrapTable"><p><tt>rectangle circle triangle ellipse star text scale rotate put-image</tt></p></td></tr></table></div><p><div id="lessonToolbar" class="fixed"><input type="button" value="Show Teacher Notes" onclick="toggleTeacherNotes(this);"></input><br/><input type="button" value="Discussion Group" onclick="showGroup()"/></div></p></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Introduction</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>Signs for kids, entitled "update-world", "draw-world" and "big-bang"</p></li><li><p>Cutout images of the dog and ruby</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li><li><p>The Ninja World 3 file [NW3.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=t77yPXKDWs &amp;" target="embedded">WeScheme</a> projected onto the board</p></li></ul></div></div><div class="segment"><p><a name="lesson_Introduction14087"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Introduction
+
+
+
+<span class="time">(Time 15 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">So far, we&rsquo;ve been working with three main functions to make our game and animate our world: <tt>update-world</tt>,
+<tt>draw-world</tt>, and <tt>big-bang</tt>. At this point, your game might use a few more functions than these, but
+Ninja World is still as basic as you remember it.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Open the <a href="http://www.wescheme.org/openEditor?publicId=t77yPXKDWs&amp;" target="embedded">Ninja World 3</a>
+file and press "Run", to watch the dog and the ruby fly across the screen.</p></li><li><p>What is the contract for each of the functions in this game? What do they do?</p></li><li><p>Each time <tt>update-world</tt> is called, What changes about the dog? How does it change?
+          What about the ruby?</p></li><li><p>Where on the screen does <tt>draw-world</tt> put the image of the dog? the ruby? The clouds?</p></li><li><p>If you were to call <tt>update-world</tt> on <tt>(make-world 0 640)</tt>, What would you get back?
+                    What is the world that is produced? Where are the dog and ruby after that
+                    world is evaluated?</p></li></ul></div></div><div class="SIntrapara">In this version of Ninja World, both the dog and the ruby are moving as they should. But that&rsquo;s old news: you&rsquo;ve already
+made the characters in your game move on their own. Let&rsquo;s add more.</div></p></div><div class="teacher"><p>This lesson is another opportunity to have students"act out the three main functions in Ninja World. Draw a box on the
+board with <tt>(make-world 0 640)</tt> in it, labelled "world". Ask for a volunteer, and given them the <tt>update-world</tt>
+nametag to wear. Ask for <tt>update-world</tt>&rsquo;s Contract and Purpose Statement. Go through a few iterations of having
+<tt>update-world</tt> evaluate the world on the board, and each subsequent world that they update.
+ (In the first example,
+the student should erase the 0 and write a 10, and erase the 640 and write a 635. If they are stuck, refer them back
+to the code.) Take another student, and give them the <tt>big-bang</tt> sign. They&rsquo;ll start the whole
+animation, and will have a timer. Instruct the class to yell "tick!" every five seconds, and when they do,
+<tt>big-bang</tt> will give the current world to <tt>update-world</tt>, who will then update it and replace it with the new
+world. Let this go on for a few iterations, so the rest of the class can see the world structure being changed while
+they count down. Finally, give the <tt>draw-world</tt> sign to another volunteer, along with the cutouts
+of the dog and ruby. As before, ask for their name, domain, range.
+When they are called, they will be given a <tt>world</tt> structure and will place the image of the dog and the ruby at the
+appropriate spots on the board. Change the value of the world back to <tt>(make-world 0 640)</tt>. Call on <tt>draw-world</tt>
+a few times with different worlds, so the class can see the dog and ruby moving accross the screen. When each
+volunteer has practiced, put all the functions together: On each "tick" the class makes, <tt>big-bang</tt> will call on
+<tt>update-world</tt> to update the current world, and then <tt>draw-world</tt> to draw that updated world. Again, go
+through a few iterations, so the class can see the world structure changing and characters moving in as a result.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The time is nigh: we need to get that ninja cat onto the screen so that our game is playable. She&rsquo;ll be able to move up and down.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Do we need to change anything in the code to make this work?</p></li><li><p>What part of the game will we need to keep track of if Ninja Cat is moving up and down? What would be a
+good <span class="vocab">variable</span> name for this?</p></li></ul></div></div><div class="SIntrapara">We need to keep track of the cat&rsquo;s y-coordinate, so let&rsquo;s add a <tt>catY</tt> to the world.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Where in the code is the world struct defined?</p></li><li><p>If the cat is in the center of the screen, what should the value of <tt>catY</tt> be?</p></li><li><p>Add another number to the world struct, representing the cat&rsquo;s y-coordinate.</p></li></ul></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Right now, even though the cat&rsquo;s y-coordinate has been added to the world struct, there&rsquo;s no function to take in keypresses and
+make it move. This is what we&rsquo;re going to write next. But before we figure out how to write the function to move the cat,
+we need to actually add her into the game.
+</div><div class="SIntrapara"><div class="activity"><p>Which functions will need to change, now that the world structure is different?</p></div></div><div class="SIntrapara">Since the world now contains three things, you&rsquo;ll need to change every single <tt>make-world</tt> in the code.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Starting from the first line, go through the code and look for every instance of
+<tt>make-world</tt>, changing it to reflect the new world struct.</p></li><li><p>How do you get the <tt>catY</tt> out of the world?</p></li><li><p>We said that we&rsquo;ll be writing another function to handle keypresses and moving the cat, so just
+add the <tt>catY</tt> to <tt>update-world</tt>. Don&rsquo;t worry about changing its value.</p></li><li><p>Inside  <tt>draw-world</tt>, use the <tt>put-image</tt> function to place the image of Ninja Cat on top of
+        the other images in the game. If she starts in the center of the screen, on what x-coordinate
+        will she be placed? What about her y-coordinate?</p></li></ul></div></div></p></div><div class="teacher"><p>After the <tt>catY</tt> is added to the world struct, but before any of the functions have changed, try running the
+simulation again, giving the ninja cat cutout to the <tt>draw-world</tt> volunteer. The world now has three things in it
+(<tt>dogX</tt>, <tt>rubyX</tt>, and <tt>catY</tt>), but the updating and drawing functions will change only the dog and ruby&rsquo;s
+positions. When <tt>big-bang</tt> starts the animation, only the <tt>dogX</tt> and <tt>rubyX</tt> will be updated. After a few
+iterations, tell the volunteers that you&rsquo;ve pressed the "up" key. If <tt>draw-world</tt> begins moving the ninja cat cutout,
+refer them back to the code. You haven&rsquo;t programmed anything to change <tt>catY</tt> yet.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Keypress</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Students will extend their understanding of events to cover key-events</p></li><li><p>Students will deepen their knowledge of conditionals, by combining them with struct accessor and constructor functions.</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Keypress14088"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Keypress
+
+
+
+<span class="time">(Time 35 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now that the world structure is consistant across all the functions in Ninja World, we&rsquo;re ready to make the cat move.
+                      </div><div class="SIntrapara"><div class="activity"><p>Open your workbook to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 28</a>. Using the Design Recipe, write the
+                      function <tt>keypress</tt> for the Ninja World game.</p></div></div><div class="SIntrapara"><div class="banner">Step 1 - Contract and Purpose Statement</div>
+                      The word problem tells us that the function&rsquo;s name will be <tt>keypress</tt>. What about the Domain? Think about what
+                      the function needs to know in order to handle a keypress: it needs the World, otherwise it wouldn&rsquo;t know what to
+                      update. But it also needs to know what key was pressed (either <tt>"up"</tt> or <tt>"down"</tt>).
+                      </div><div class="SIntrapara"><div class="activity"><ul><li><p>What datatypes are <tt>"up"</tt> and <tt>"down"</tt>?</p></li><li><p>What is the Domain of <tt>keypress</tt>? The Range?</p></li><li><p>What is a good Purpose Statement for this function?</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+; keypress : World String -&gt; World
+; Given a world and key pressed, updates the world's catY
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="banner">Step 2 - Examples</div>
+                               </div><div class="SIntrapara"><div class="activity"><p>Write an example using the <tt>START</tt> world, when the user presses <tt>"up"</tt>.</p><ul><li><p><tt>(EXAMPLE (keypress START "up") ...)</tt></p></li><li><p>What should you get back? (HINT: Look at the Range)</p></li><li><p>What function makes a world? What things are part of this world?</p></li><li><p>&nbsp;<textarea>
+(EXAMPLE (keypress START "up")
+         (make-world ...dogX...rubyX...catY))
+</textarea></p></li><li><p>Does the <tt>dogX</tt> change when the user presses <tt>"up"</tt>? How do you get the old <tt>dogX</tt> out of the <tt>START</tt> world?</p></li><li><p>&nbsp;<textarea>
+(EXAMPLE (keypress START "up")
+         (make-world (world-dogX START)...rubyX...catY))
+</textarea></p></li><li><p>Does the <tt>rubyX</tt> change when the user presses <tt>"up"</tt>? How do you get the old <tt>rubyX</tt> out of the <tt>START</tt> world?</p></li><li><p>&nbsp;<textarea>
+(EXAMPLE (keypress START "up") (make-world (world-dogX START)
+                                             (world-rubyX START)
+                                              ...catY...))
+</textarea></p></li><li><p>What about the <tt>catY</tt>? How much should it change if the user presses <tt>"up"</tt>? Let&rsquo;s say 10 pixels.</p></li><li><p>Should you add or subtract from the <tt>catY</tt> if the <tt>"up"</tt> key is pressed? Why?</p></li></ul></div></div></p><p>Your first example should look like:
+&nbsp;<textarea>
+(EXAMPLE (keypress START "up") (make-world (world-dogX START)
+                                           (world-rubyX START)
+                                        (+ (world-catY START) 10)))
+</textarea></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><p>Write one more example for <tt>keypress</tt> using the <tt>START</tt> world and the <tt>"down"</tt> key. Think about how the <tt>catY</tt> will change this time</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+(EXAMPLE (keypress START "down") (make-world (world-dogX START)
+                  (world-rubyX START)
+                  (- (world-catY START) 10)))
+</textarea>
+</div><div class="SIntrapara"><div class="activity"><p>Next, carefully go through your examples and circle <span style="font-style: italic">everything</span> that changes. Does this function behave like the functions you&rsquo;ve been working with?</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="banner">Step 3 - Definition</div>
+</div><div class="SIntrapara"><div class="activity"><p>What goes into the function header? What are some good variable names for the world and string (representing the key pressed) in the Domain?</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (keypress w key)
+              ...)
+</textarea>
+ What now? This is a test of your programming intuition: you have two different examples, where you add 10 to <tt>catY</tt> in one case
+ but subtract 10 in another. How can a function behave so differently? It has multiple conditions, with a different response to each.
+ You&rsquo;ve already seen this before, back in Bootstrap:1 - <tt>cond</tt>.
+ <tt>cond</tt> is a special function, which signals to the computer that the function will have multiple conditions: it behaves differently
+ depending on what input(s) it gets. This is also known as a <span class="vocab">piecewise function</span>.</div></p></div><div class="teacher"><p>Be sure to check students&#8217; Contracts and EXAMPLEs during this exercise, especially when it&#8217;s time for them to circle and
+label what changes between examples. This is the crucial step in the Design Recipe where they should discover the need
+for <tt>cond</tt>.</p></div></li><li class="lessonItem"><div class="student"><p>Each <span class="vocab">piecewise function</span> has at least one <span class="vocab">clause</span>. Each clause has a Boolean question and a result. In
+     your <tt>keypress</tt> function, there is a clause for the <tt>"up"</tt> key, and another for the <tt>"down"</tt> key.
+     If the question evaluates to true, the expression gets evaluated and returned. If the question is false, the computer
+     will skip to the next <span class="vocab">clause</span>. To write a function with multiple conditions, start with <tt>cond</tt> and use
+     square brackets to add a branch. We know that every branch has a test and a result, making a <span class="vocab">clause</span>.
+     &nbsp;<textarea>
+(define (keypress w key)
+(cond
+      [...test...  ...result...]))
+</textarea></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Let&rsquo;s start the first branch. It will test if the <tt>key</tt> pressed is equal to <tt>"up"</tt>. </div><div class="SIntrapara"><div class="activity"><p>What function can we use to test if two strings are equal?</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (keypress w key)
+(cond
+        [(string=? key "up")  ...result...]))
+</textarea></div></p></div><div class="teacher"><p>Square brackets enclose the question (a statement returning a boolean) and answer for each clause. There can only be one
+expression in each answer.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">What is the result if the key is <tt>"up"</tt>? (HINT: Look back at your EXAMPLES for help.) You can copy in the example
+                                 for <tt>"up"</tt>, and change all instances of <tt>START</tt> to the <span class="vocab">variable</span>, <tt>w</tt>:
+&nbsp;<textarea>
+(define (keypress w key)
+(cond
+        [(string=? key "up")  (make-world (world-dogX w)
+                                          (world-rubyX w)
+                                       (+ (world-catY w) 10))]))
+</textarea>
+</div><div class="SIntrapara"><div class="activity"><p>What is the second condition that needs to be considered? What expression will test that condition? Write the second branch of the <tt>keypress</tt> function.</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">We also need to test whether the user pressed the <tt>"down"</tt> key:
+&nbsp;<textarea>
+(define (keypress w key)
+(cond
+        [(string=? key "up")  (make-world (world-dogX w)
+                                          (world-rubyX w)
+                                       (+ (world-catY w) 10))]
+
+        [(string=? key "down")  (make-world (world-dogX w)
+                                            (world-rubyX w)
+                                         (- (world-catY w) 10))]))
+</textarea>
+              Now the computer knows what to do when either <tt>"up"</tt> or <tt>"down"</tt> is pressed, but there are lots of other keys on your keyboard.
+              </div><div class="SIntrapara"><div class="activity"><p>Type the above code into the Ninja Cat game and click "Run". Ninja Cat moves when you press the "up" and "down"
+arrow keys. What happens if you press a different key? You should get an error...can you guess why?</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Racket doesn&rsquo;t know what to do if any other key is pressed, because we haven&rsquo;t told it what to do.
+                               </div><div class="SIntrapara"><div class="activity"><ul><li><p>Should the world change if the user hits the spacebar, or the <tt>"r"</tt> key?</p></li><li><p>Which world should be returned if any other key is pressed?</p></li></ul></div></div><div class="SIntrapara">Instead of enumerating all the values of the original world, we can use the variable, <tt>w</tt>:
+&nbsp;<textarea>
+(define (keypress w key)
+(cond
+        [(string=? key "up")  (make-world (world-dogX w)
+                                          (world-rubyX w)
+                                       (+ (world-catY w) 10))]
+
+        [(string=? key "down")  (make-world (world-dogX w)
+                                            (world-rubyX w)
+                                         (- (world-catY w) 10))]
+        [else w]))
+</textarea></div></p><p>The last clause in a conditional can be an <tt>else</tt> clause, which gets evaluated if all the previous clauses were <tt>false</tt>.</p></div><div class="teacher"><p><tt>else</tt> clauses are best used as a catch-all for cases that you can&#8217;t otherwise enumerate. If you can state a precise
+ question for a clause, write the precise question instead of else. For example, if you have a function that does
+ different things depending on whether some variable <tt>x</tt> is larger than <tt>5</tt>, it is better for beginners to
+ write the two questions <tt>(&gt; x 5)</tt> and <tt>(&lt;= x 5)</tt> rather than have the second question be <tt>else</tt>.
+ Explicit questions make it easier to read and maintain programs. When you use <tt>else</tt>, someone has to read
+ all the previous questions to know what condition else corresponds to: they can&#8217;t just skim all the questions
+ to find the one that matches their situation. This makes code more readable and understandable.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Keypresses in Your Game</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Using conditionals, students will write a function to handle different keypresses in their game.</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Keypresses%20in%20Your%20Game14089"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Keypresses in Your Game
+
+
+
+<span class="time">(Time 35 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">In Ninja World, the player can only press two keys: <tt>"up"</tt> or <tt>"down"</tt>.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>What field in the World changes when the player presses <tt>"up"</tt>?
+How does it change?</p></li><li><p>Think about the person playing your game. How will they control the game? What
+key will make YOUR player move up? Down? What else can they do? Move side-to-side?
+Jump? Teleport? Shoot a projectile?</p></li><li><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 27</a> in your workbooks.
+        Write down the various keys that the user can hit to control the game.
+        For each one, write down the field in your world struct that changes,
+        and how it changes.</p></li></ul></div></div></p></div><div class="teacher"><p>Review students&rsquo; workbook pages, and check for understanding: could they change multiple things in their game
+with one keypress?</p></div></li><li class="lessonItem"><div class="student"><div class="activity"><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 30</a> in your workbooks. Choose 3
+keys that control the game, and go through the design recipe: Write EXAMPLES for what should
+happen to your START world depending on which key was pressed. Then define your function. Once
+you&rsquo;ve completed the Design Recipe, type your <tt>keypress</tt> function into your games.</p></div><p>Of course, keypresses can do a lot more in a videogame than just move a character up and down. By using what
+                                  your learned about Boolean functions, you can add more advanced movement. Here are some ideas:</p><ul><li><p><span style="font-weight: bold">Warping:</span> instead of having the player&#8217;s y-coordinate change by adding or subtracting, replace it with a Number to
+ have the player suddenly appear at that location. (For example, hitting the <tt>"c"</tt> key causes your player to warp back
+ to the center of the screen, at y=240.)</p></li><li><p><span style="font-weight: bold">Boundary-detection:</span> Change the condition for moving up so that the player only moves up if <tt>key</tt> = <tt>"up"</tt>
+ AND the player&rsquo;s y-coordinate is less than <tt>480</tt>. Likewise, change the condition for <tt>"down"</tt> to also check
+ that the player&rsquo;s y-coordinate is greater than 0.</p></li><li><p><span style="font-weight: bold">Wrapping:</span> Add a condition (before any of the keys) that checks to see if the player&#8217;s y-coordinate is above
+ the screen <tt>(&gt; y 480)</tt>. If it is, have the player warp to the bottom. Add another condition so that the player
+ warps back up to the top of the screen if it moves below the bottom.</p></li><li><p><span style="font-weight: bold">Challenge:</span> Have a character hide when the <tt>"h"</tt> key is pressed, only to re-appear when it is pressed again.</p></li></ul></div><div class="teacher"><p>Hint for the challenge: multiply by -1!</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Closing</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Closing14090"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Closing
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>With <span class="vocab">conditionals</span> and <span class="vocab">piecewise functions</span>, you can make a lot of things happen in your
+     game with just a few lines of code, like controlling the movement of characters. Speaking of
+     controlling characters, what happens in Ninja World when the dog and ruby go off the screen?
+     They keep going, but don&rsquo;t come back - the same problem we had in Bootstrap:1, and if you
+     need a refresher on how to fix it, that&rsquo;s what we&rsquo;ll be covering in the next unit.</p></div><div class="teacher"><p>Have students show each other their (controllable games).</p></div></li></ul></div></div></blockquote><p></p><div id="copyright"><a href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img src="pict_2.png" alt="image" width="88" height="31"/></a>Bootstrap by <a href="http://www.bootstrapworld.org/">Emmanuel Schanzer</a> is licensed under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons 3.0 Unported License</a>. Based on a work at <a href="http://www.bootstrapworld.org/">www.BootstrapWorld.org</a>. Permissions beyond the scope of this license may be available at <a href="mailto:schanzer@BootstrapWorld.org">schanzer@BootstrapWorld.org</a>.</div></div></div><div id="contextindicator">&nbsp;</div></body></html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><title>Unit 7: Complex update-world</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="pretty-printing.css" title="default"/><link rel="stylesheet" type="text/css" href="codemirror.css" title="default"/><link rel="stylesheet" type="text/css" href="bootstrap.css" title="default"/><link rel="stylesheet" type="text/css" href="textbook.css" title="default"/><link rel="stylesheet" type="text/css" href="extra_curriculum.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="codemirror.js"></script><script type="text/javascript" src="runmode.js"></script><script type="text/javascript" src="scheme2.js"></script><script type="text/javascript" src="bootstraplesson.js"></script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2Chttp%3A%2F%2Fwww.cs.wpi.edu%2F%7Ekfisler%2Fmathjaxlocal.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;">&bull;</td><td></td><td><a href="" class="tocviewselflink" data-pltdoc="x">Unit 7:<span class="mywbr"> &nbsp;</span> Complex update-<wbr></wbr>world</a></td></tr></table></div></div></div><div class="tocsub"><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber"></span><a href="#%28part._.Unit_7__.Complex_update-world%29" class="tocsubseclink" data-pltdoc="x">Unit 7:<span class="mywbr"> &nbsp;</span> Complex update-<wbr></wbr>world</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><a name="(part._.Unit_7__.Complex_update-world)"></a><p><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><noscript></noscript><script type="text/javascript" src="easyXDM.min.js"></script><noscript></noscript><script type="text/javascript" src="json2.min.js"></script><noscript></noscript><script type="text/javascript" src="bootstrap-helpers.js"></script><noscript></noscript></p><div class="headercontent"><span class="BootstrapTitle"><img src="pict.png" alt="image" width="150" height="150"/><span class="TitleUnitNum">Unit 7</span>Complex update-world</span></div><div class="SubFlow" id="overviewDescr"><span class="BootstrapHeader">Unit Overview</span><p>Students continue to combine their use of Cond and Data Structures, this time identifying ways in which the World structure might change without any user input.</p></div><blockquote class="OverviewBoundary"><iframe id="forum_embed"></iframe><div class="summary"><div class="" id="BootstrapAgenda"><p>Agenda</p><ul class="BootstrapAgendaList"><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Introduction14575"><span class="BSLessonName">Introduction</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">20 min</span><a href="#lesson_Protecting%20the%20Boundaries14576"><span class="BSLessonName">Protecting the Boundaries</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">45 min</span><a href="#lesson_Tests%20and%20Results14577"><span class="BSLessonName">Tests and Results</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">15 min</span><a href="#lesson_Branches%20in%20update-world14578"><span class="BSLessonName">Branches in update-world</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Closing14579"><span class="BSLessonName">Closing</span></a></p></li></ul></div><div id="ProductOutcomes" class=" "><span class="BootstrapHeader">Product Outcomes:</span><ul><li><p>Students will use Cond in their update-world functions</p></li><li><p>Students will identify circumstances in which the functions in their game should behave differently</p></li><li><p>Students will define these circumstances - and the desired behavior - in code, as different Cond branches</p></li></ul></div><div id="LearningObjectives" class=" "><span class="BootstrapHeader">Standards and Evidence Statements:</span><p>Standards with prefix BS are specific to Bootstrap; others are from the Common Core. Mouse over each standard to see its corresponding evidence statements. Our <a href="../../../../Standards.shtml">Standards Document</a> shows which units cover each standard. </p><ul class="LearningObjectivesList"></ul></div><span class="BootstrapHeader">Length: 90 minutes</span><div id="Glossary" class=" "><span class="BootstrapHeader">Glossary:</span><ul><li><p><span class="vocab">contract</span></p></li></ul></div><div id="Materials" class=" "><span class="BootstrapHeader">Materials:</span><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>The Ninja World 4 file [NW4.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=gbz2w2pCTu&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li></ul></div><div id="Preparation" class=" "><span class="BootstrapHeader">Preparation:</span><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li><li><p>Write the Ninja World version of update-world towards the bottom of the board, with room to transform it into a cond branch under the function header.</p></li></ul></div><div id="LanguageTable" class=" "><table cellspacing="0" cellpadding="0" class="thetable"><tr><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Types</p></td><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Functions</p></td></tr><tr><td align="center" class="BootstrapTable"><p>Number</p></td><td align="center" class="BootstrapTable"><p><tt>+ - * / sq sqrt expt</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>String</p></td><td align="center" class="BootstrapTable"><p><tt>string-append string-length</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Image</p></td><td align="center" class="BootstrapTable"><p><tt>rectangle circle triangle ellipse radial-star scale rotate put-image</tt></p></td></tr></table></div><p><div id="lessonToolbar" class="fixed"><input type="button" value="Show Teacher Notes" onclick="toggleTeacherNotes(this);"></input><br/><input type="button" value="Discussion Group" onclick="showGroup()"/></div></p></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Introduction</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>The Ninja World 4 file [NW4.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=gbz2w2pCTu&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li><li><p>Write the Ninja World version of update-world towards the bottom of the board, with room to transform it into a cond branch under the function header.</p></li></ul></div></div><div class="segment"><p><a name="lesson_Introduction14575"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Introduction
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><ul><li><p>Open the <a href="http://www.wescheme.org/openEditor?publicId=gbz2w2pCTu&amp;" target="embedded">Ninja World 4</a> file.</p></li><li><p>What is in the world structure?</p></li><li><p>What does the <tt>update-world</tt> function do?</p></li><li><p>What is <tt>dogX</tt> when the dog is in the center of the screen? According to the code, what will the
+next <tt>dogX</tt> be?</p></li><li><p>What is <tt>dogX</tt> when the dog is on the right-hand edge? What will the next <tt>dogX</tt> be? And
+ the next? And the next?</p></li><li><p>What happens when the dog reaches the edge of the screen? What SHOULD happen?</p></li></ul></div></div><div class="SIntrapara">Right now the dog disappears off the side of the screen and never comes back. It&rsquo;s time to fix that. </div></p></div><div class="teacher"></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Protecting the Boundaries</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Add detail to their undertsanding of the update-world function</p></li><li><p>Identify possible sub-domains which require different behavior of the function</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Protecting%20the%20Boundaries14576"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Protecting the Boundaries
+
+
+
+<span class="time">(Time 20 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Just as in Bootstrap 1, we need to write a function that checks whether the dog has gone off the right side
+                                of the screen. First, let&rsquo;s review a few things:
+                                </div><div class="SIntrapara"><div class="activity"><ul><li><p><tt>true</tt> and <tt>false</tt> are examples of what datatype?</p></li><li><p>What function takes two numbers and checks if the first number is
+<span style="font-style: italic">greater than</span> the second?</p></li><li><p>What function checks if a number is <span style="font-style: italic">less than</span> another?</p></li><li><p>What function checks if two numbers are <span style="font-style: italic">equal</span>?</p></li></ul></div></div><div class="SIntrapara">Here is the contract for the greater than function:
+&nbsp;<textarea>
+; &gt; : Number Number -&gt; Boolean
+; Checks whether the first number is greater than the second
+</textarea>
+                               </div><div class="SIntrapara"><div class="activity"><p>Copy this into your Contracts page and write down the contracts for the other two Boolean functions.</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><ul><li><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 33</a> in your workbook.</p></li><li><p>What is the name of the first function on this page?</p></li><li><p><tt>off-right?</tt> will return <tt>true</tt> if a character goes off the right side
+ of the screen. How large can the x-coordinate be before a character goes off
+ the screen? (Hint: How large is the screen?)</p></li><li><p>Write the <span class="vocab">Contract</span> for this function.</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+; off-right? : Number -&gt; Boolean
+; returns true if the given number is greater than 640
+</textarea>
+                                 Now let&rsquo;s pick a few examples of coordinates to write our EXAMPLEs:
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>What x-coordinate would put a character at the center of the screen?</p></li><li><p>How do you check whether it&rsquo;s off the right hand side?</p></li><li><p>Any x-coordinate greater than 640 is off the right side of the screen, so how
+would you determine whether or not the example number is <span style="font-style: italic">greater than</span> 640?</p></li></ul></div></div><div class="SIntrapara"><tt>(EXAMPLE (off-right? 320) (&gt; 320 640))</tt>
+                                 </div><div class="SIntrapara"><div class="activity"><p>Write another EXAMPLE for a coordinate that is off the screen on the right side, circle what
+changes, and write your function definition.</p></div></div></p></div><div class="teacher"><p>Remind students about Sam the butterfly from Bootstrap 1. This function does the same thing as <tt>safe-right</tt>,
+to determine whether the character has gone off the screen based on its x-coordinate.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">You now have a function to check whether an object has run off the right side of the screen. But think
+about Ninja World: if the Ruby is moving to the left, do you care whether the ruby goes off the right side?
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Complete the design recipe for <tt>off-left?</tt> on
+<a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 33</a>. Instead of checking if
+a number is greater than 640, what will you need to check?</p></li><li><p>When finished, copy your functions into your
+<a href="http://www.wescheme.org/openEditor?publicId=gbz2w2pCTu&amp;" target="embedded">Ninja World 4</a>
+file, where it says <tt>;; TESTS FOR COND</tt>.</p></li></ul></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now we have a way to check whether something has gone off the right OR the left of the screen, but we still
+                                haven&rsquo;t told the game what to do when it does. In Ninja World, after the dog goes off the right side of the
+                                screen, he should reappear on the left-hand side.
+                                </div><div class="SIntrapara"><div class="activity"><p>In this situation, what would the next <tt>dogX</tt> be after 640?</p></div></div><div class="SIntrapara">We want to change <tt>update-world</tt> so that it behaves the old way most of the time, but it sets
+                                <tt>dogX</tt> to zero when <tt>dogX</tt> is greater than 640.
+                                </div><div class="SIntrapara"><div class="activity"><p>What can we use that makes a function behave one way for some inputs but another way for
+different inputs?</p></div></div><div class="SIntrapara">For now there are two different <span style="font-style: italic">conditions</span>: when <tt>dogX</tt> is greater than 640 and then
+                                the rest of the time. Let&rsquo;s work on the code for this:
+&nbsp;<textarea>
+(define (update-world w)
+(cond
+        [...test...  ...result...]
+        [else  (make-world  (+ (world-dogX w) 10)
+                            (- (world-rubyX w) 5)
+                               (world-catY w))]))
+</textarea></div></p></div><div class="teacher"><p>Remind students that each <tt>cond</tt> branch will contain a test and a result, which is evaluated if its test returns <tt>true</tt>.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">We still want our original code to be there. It&rsquo;s now going to be used in the <tt>else</tt> clause,
+                                 because when <tt>dogX</tt> is not off the right side of the screen, we want the world to update normally.
+                                 </div><div class="SIntrapara"><div class="activity"><p>Think about the first condition. What is the test that tells you if a number is greater than 640?</p></div></div><div class="SIntrapara">You could use the greater than function(<tt>&gt;</tt>) and compare two numbers, but you&rsquo;ve already written a
+                                 function that takes in only one number and tells you whether or not it is greater than 640.
+                                 <tt>off-right?</tt> <span style="font-style: italic">does the work for you</span>. But how would you determine whether or not the dog is off
+                                 the right? You&rsquo;ll need to pull the dog&rsquo;s x-coordinate out of the world...
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>What function do we use for that?</p></li><li><p>So what will the input to <tt>off-right?</tt> be?</p></li><li><p>Add this to your <tt>update-world</tt> function:</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (update-world w)
+(cond
+        [(off-right? (world-dogX w)) ...result...]
+        [else  (make-world  (+ (world-dogX w) 10)
+                            (- (world-rubyX w) 5)
+                               (world-catY w))]))
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The first clause tests whether the dog&rsquo;s x-coordinate is off the right side of the screen. If the test
+                                  returns <tt>true</tt>, what should the result be? We know that we need to return a World, since the Range
+                                  of <tt>update-world</tt> is a World. That means we can immediately write <tt>(make-world...)</tt>:
+&nbsp;<textarea>
+(define (update-world w)
+(cond
+        [(off-right? (world-dogX w))
+                (make-world ...dogX...
+                            ...rubyX...
+                            ...catY...)]
+        [else  (make-world  (+ (world-dogX w) 10)
+                            (- (world-rubyX w) 5)
+                               (world-catY w))]))
+</textarea>
+                                 How should <tt>dogX</tt> change in this condition? We said we want to move the dog back to the left side
+                                 of the screen.
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>What will the new value of <tt>dogX</tt> be, if it, moves back to the
+left side of the screen?</p></li><li><p>Does <tt>rubyX</tt> change if the dog goes off the screen? How about <tt>catY</tt>?</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (update-world w)
+(cond
+        [(off-right? (world-dogX w))
+                (make-world 0
+                            (world-rubyX w)
+                            (world-catY w))]
+        [else  (make-world  (+ (world-dogX w) 10)
+                            (- (world-rubyX w) 5)
+                            (world-catY w))]))
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now it&rsquo;s time to think about the ruby...
+                                  </div><div class="SIntrapara"><div class="activity"><ul><li><p>Instead of checking if <tt>rubyX</tt> was off the <span style="font-weight: bold">right</span> side of the screen,
+what do we need to check?</p></li><li><p>What function have you already written that checks if a number is less than 0?</p></li><li><p>How does <tt>update-world</tt> need to change? What will the second <tt>cond</tt>
+branch look like?</p></li><li><p>Finish the code for <tt>update-world</tt> so that it also checks whether the
+ruby has gone off the left-hand side of the screen.</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (update-world w)
+(cond
+        [(off-right? (world-dogX w))
+                (make-world 0
+                            (world-rubyX w)
+                            (world-catY w))]
+        [(off-left? (world-rubyX w))
+                (make-world (world-dogX w)
+                            640
+                            (world-catY w))]
+        [else  (make-world  (+ (world-dogX w) 10)
+                            (- (world-rubyX w) 5)
+                            (world-catY w))]))
+</textarea></div></p></div><div class="teacher"><p>This can be an opportunity to discuss abstraction and the usefullness of reusing code with your
+students. The <tt>cond</tt> tests in <tt>update-world</tt> could be written as:
+<tt>(&gt; (world-dogX w) 640)</tt>, or <tt>(&lt; (world-rubyX w) 0)</tt>, but this is more work than
+neccessary if the <tt>off-right</tt> and <tt>off-left</tt> functions have been written, and could
+be confusing for someone else looking at the code, who doesn&rsquo;t know why <tt>dogX</tt> is being
+compared to 640. Additionally, from a programming point of view, it makes sense to use the
+specific screen boundaries in as few functions as possible: If a programmer wants his or her
+game to be playable on a larger screen (such as a tablet), they will have to go through their
+code and change every function that tests boundaries based on the old screen size, 640x480. If
+only the <tt>off-right</tt> and <tt>off-left</tt> functions use the screen size, the programmer can
+make a few quick changes to the numbers, instead of searching through <tt>cond</tt> branches such
+as in the second example.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Tests and Results</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will use Cond in their update-world functions</p></li><li><p>Students will identify circumstances in which the functions in their game should behave differently</p></li><li><p>Students will define these circumstances - and the desired behavior - in code, as different Cond branches</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Tests%20and%20Results14577"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Tests and Results
+
+
+
+<span class="time">(Time 45 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now to use what you know about boundary detection and apply it to your own game.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Open your game file.</p></li><li><p>Reformat your <tt>update-world</tt> function so that it uses
+<tt>cond</tt>, with your current code inside the <tt>else</tt> clause.</p></li><li><p>Next, copy and paste your <tt>off-left?</tt> and <tt>off-right?</tt>
+functions from Ninja World into your game.</p></li><li><p>Think about the things in your game that fly offscreen. Do they
+fly off the left? The right? The top or bottom? Do you need to
+write an <tt>off-top?</tt> function or <tt>off-bottom?</tt></p></li><li><p>In the lefthand column of <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 34</a>,
+make a list of the tests that you need to do to decide whether each
+thing flies offscreen. For example, with the dog we said
+<tt>(off-right? (world-dogX w))</tt>. On the right, figure out
+which world you need to make, so that the thing
+you&rsquo;re testing re-appears on screen once it has flown off.</p></li></ul></div></div></p></div><div class="teacher"><p>Work in small groups to complete the workbook page.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Branches in update-world</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Branches%20in%20update-world14578"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Branches in update-world
+
+
+
+<span class="time">(Time 15 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Look at the <tt>cond</tt> branches for Ninja World&rsquo;s <tt>update-world</tt> function. Notice
+            that for each branch, we need a test and a result. This is exactly what
+            you&rsquo;ve written in your workbook for your game. All you need to do now is
+            surround each row of your table with square brackets and type it into
+            your game.
+            </div><div class="SIntrapara"><div class="activity"><p>Adapt <tt>update-world</tt> so that that each thing re-appears on
+      screen once it has flown off.</p></div></div></p></div><div class="teacher"><p>Work in pairs or small groups to assist students with their own <tt>update-world</tt>
+functions.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Closing</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Closing14579"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Closing
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>Take a minute and admire your handiwork: You&rsquo;ve put a lot of time and effort into your
+game during this course, and it&rsquo;s coming together nicely with complex data structures
+and advanced movement. It&rsquo;s already much more sophisticated than your Bootstrap 1 game!
+But something is still missing: in the Ninja Cat game, nothing happens when the cat
+collides with the dog, or ruby. In the next unit we&rsquo;ll change that: you&rsquo;ll be able
+to handle collisions with the characters in your game! Start thinking about what should
+happen when your player reaches some treasure, shoots a zombie, or some other condition
+in your game.</p></div><div class="teacher"><p>Have the students show off their games to one another.</p></div></li></ul></div></div></blockquote><p></p><div id="copyright"><a href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img src="pict_2.png" alt="image" width="88" height="31"/></a>Bootstrap by <a href="http://www.bootstrapworld.org/">Emmanuel Schanzer</a> is licensed under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons 3.0 Unported License</a>. Based on a work at <a href="http://www.bootstrapworld.org/">www.BootstrapWorld.org</a>. Permissions beyond the scope of this license may be available at <a href="mailto:schanzer@BootstrapWorld.org">schanzer@BootstrapWorld.org</a>.</div></div></div><div id="contextindicator">&nbsp;</div></body></html>

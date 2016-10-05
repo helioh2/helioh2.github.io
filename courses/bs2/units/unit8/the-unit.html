@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><title>Unit 8: Collision Detection</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="pretty-printing.css" title="default"/><link rel="stylesheet" type="text/css" href="codemirror.css" title="default"/><link rel="stylesheet" type="text/css" href="bootstrap.css" title="default"/><link rel="stylesheet" type="text/css" href="textbook.css" title="default"/><link rel="stylesheet" type="text/css" href="extra_curriculum.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="codemirror.js"></script><script type="text/javascript" src="runmode.js"></script><script type="text/javascript" src="scheme2.js"></script><script type="text/javascript" src="bootstraplesson.js"></script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2Chttp%3A%2F%2Fwww.cs.wpi.edu%2F%7Ekfisler%2Fmathjaxlocal.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;">&bull;</td><td></td><td><a href="" class="tocviewselflink" data-pltdoc="x">Unit 8:<span class="mywbr"> &nbsp;</span> Collision Detection</a></td></tr></table></div></div></div><div class="tocsub"><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber"></span><a href="#%28part._.Unit_8__.Collision_.Detection%29" class="tocsubseclink" data-pltdoc="x">Unit 8:<span class="mywbr"> &nbsp;</span> Collision Detection</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><a name="(part._.Unit_8__.Collision_.Detection)"></a><p><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><noscript></noscript><script type="text/javascript" src="easyXDM.min.js"></script><noscript></noscript><script type="text/javascript" src="json2.min.js"></script><noscript></noscript><script type="text/javascript" src="bootstrap-helpers.js"></script><noscript></noscript></p><div class="headercontent"><span class="BootstrapTitle"><img src="pict.png" alt="image" width="150" height="150"/><span class="TitleUnitNum">Unit 8</span>Collision Detection</span></div><div class="SubFlow" id="overviewDescr"><span class="BootstrapHeader">Unit Overview</span><p>Students return to the Pythagorean Theorem and distance formula they used in Bootstrap 1, this time with data structures and the full update-world function.</p></div><blockquote class="OverviewBoundary"><iframe id="forum_embed"></iframe><div class="summary"><div class="" id="BootstrapAgenda"><p>Agenda</p><ul class="BootstrapAgendaList"><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Introduction15037"><span class="BSLessonName">Introduction</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">10 min</span><a href="#lesson_1D%20Distance15038"><span class="BSLessonName">1D Distance</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">20 min</span><a href="#lesson_The%20Distance%20Formula15039"><span class="BSLessonName">The Distance Formula</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">10 min</span><a href="#lesson_Collide%3F15040"><span class="BSLessonName">Collide?</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">40 min</span><a href="#lesson_update-world15041"><span class="BSLessonName">update-world</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Closing15042"><span class="BSLessonName">Closing</span></a></p></li></ul></div><div id="ProductOutcomes" class=" "><span class="BootstrapHeader">Product Outcomes:</span><ul><li><p>Students will write the distance function</p></li><li><p>Students will write the collide? function</p></li><li><p>Students will use different Cond branches to identify collisions in their games</p></li></ul></div><div id="LearningObjectives" class=" "><span class="BootstrapHeader">Standards and Evidence Statements:</span><p>Standards with prefix BS are specific to Bootstrap; others are from the Common Core. Mouse over each standard to see its corresponding evidence statements. Our <a href="../../../../Standards.shtml">Standards Document</a> shows which units cover each standard. </p><ul class="LearningObjectivesList"></ul></div><span class="BootstrapHeader">Length: 90 minutes</span><div id="Glossary" class=" "><span class="BootstrapHeader">Glossary:</span><ul><li><p><span class="vocab">hypoteneuse</span></p></li></ul></div><div id="Materials" class=" "><span class="BootstrapHeader">Materials:</span><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>Cutouts of Cat and Dog images</p></li><li><p>Cutouts of Pythagorean Theorem packets [<a href="..\..\resources\images\pythag1.png">1</a>, <a href="..\..\resources\images\pythag2.png">2</a>] - 1 per cluster</p></li><li><p>The Ninja World 5 file [NW5.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=hTE94bR2V5&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li></ul></div><div id="Preparation" class=" "><span class="BootstrapHeader">Preparation:</span><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li></ul></div><div id="LanguageTable" class=" "><table cellspacing="0" cellpadding="0" class="thetable"><tr><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Types</p></td><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Functions</p></td></tr><tr><td align="center" class="BootstrapTable"><p>Number</p></td><td align="center" class="BootstrapTable"><p><tt>+ - * / sq sqrt expt</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>String</p></td><td align="center" class="BootstrapTable"><p><tt>string-append string-length</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Image</p></td><td align="center" class="BootstrapTable"><p><tt>rectangle circle triangle ellipse radial-star scale rotate put-image</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Boolean</p></td><td align="center" class="BootstrapTable"><p><tt>= &gt; &lt; string=? and or</tt></p></td></tr></table></div><p><div id="lessonToolbar" class="fixed"><input type="button" value="Show Teacher Notes" onclick="toggleTeacherNotes(this);"></input><br/><input type="button" value="Discussion Group" onclick="showGroup()"/></div></p></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Introduction</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>Cutouts of Cat and Dog images</p></li><li><p>Cutouts of Pythagorean Theorem packets [<a href="..\..\resources\images\pythag1.png">1</a>, <a href="..\..\resources\images\pythag2.png">2</a>] - 1 per cluster</p></li><li><p>The Ninja World 5 file [NW5.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a> | <a href="http://www.wescheme.org/openEditor?publicId=hTE94bR2V5&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li></ul></div></div><div class="segment"><p><a name="lesson_Introduction15037"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Introduction
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Right now, in both Ninja World and your games, nothing happens when the player collides with another
+game character. We need to write a function change that. This is going to require a
+little math, but luckily it&rsquo;s exactly the same as it was in Bootstrap:1.
+<img src="pict_2.png" alt="image" width="250" height="121"/>
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>In the image above, how far apart are the cat and dog?</p></li><li><p>If the cat was moved one space to the right, how far apart would they be?</p></li><li><p>What if the cat and dog switched positions?</p></li></ul></div></div></p><p>In one dimension, such as on a number line, finding the distance is pretty easy. If the characters
+are on the same line, you just subtract one coordinate from another, and you have your distance.
+However, if all we did was subtract the second number from the first, the function would only
+work half the time!</p><div class="activity"><p>When the cat and dog were switched, did you still subtract the dog&rsquo;s position from the
+cat&rsquo;s, or subtract the cat&rsquo;s position from the dog&rsquo;s? Why?</p></div></div><div class="teacher"><p>Draw the number line on the board, with the cutouts of the cat and dog at the given positions.
+Ask students to tell you the distance between them, and move the images accordingly.
+Having students act this out can also work well: draw a number line, have two students stand at different
+points on the line, using their arms or cutouts to give objects of different sizes. Move students along
+the number line until they touch, then compute the distance on the number line.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">1D Distance</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_1D%20Distance15038"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">1D Distance
+
+
+
+<span class="time">(Time 10 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Distances cannot be negative, so we have to make sure we are always subtracting the smaller
+                                number from the bigger one. If the characters are on the same plane, there are two conditions:
+                                if the first number is bigger, and the other is if the second is bigger.
+                                </div><div class="SIntrapara"><div class="activity"><ul><li><p>What kind of function do we need, when we have multiple
+<span style="font-style: italic">conditions</span>?</p></li><li><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 36</a>.</p></li><li><p>What is the Name of this function? Domain? Range?</p></li><li><p>Write two examples for <tt>line-length</tt> so that it subtracts the
+smaller number from the bigger one. Start with an example using
+the numbers 23 and 5, then do a second example with 5 and 23 in
+the <span style="font-style: italic">other order</span>.</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(EXAMPLE (line-length 23 5) (- 23 5))
+(EXAMPLE (line-length 5 23) (- 23 5))
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now we have an idea of the results for the <tt>cond</tt> statement, but a <tt>cond</tt> function also
+                                needs Tests. We want to <span style="font-style: italic">test</span> to see whether the first
+                                number given to <tt>line-length</tt> is greater than the second number.
+                                </div><div class="SIntrapara"><div class="activity"><ul><li><p>How would you write that test in Racket code?</p></li><li><p>And what would the result for that test be? If <tt>a</tt> is
+greater than <tt>b</tt>, which number would we subtract from
+which?</p></li><li><p>How could you include a test for wheather the two numbers are equal,
+<span style="font-style: italic">without</span> adding a third <tt>cond</tt> branch?</p></li><li><p>Write down the definition for <tt>line-length</tt>.</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (line-length a b)
+(cond
+[(&gt; a b) (- a b)]
+[(&gt;= b a) (- b a)]))
+</textarea></div></p></div><div class="teacher"><p>It is possible to replace the second test with <tt>else</tt>, because there will only be two options:
+<tt>line-length</tt> will either subtract <tt>b</tt> from <tt>a</tt>, or <tt>a</tt> from <tt>b</tt>. (If the
+numbers are equal, it doesn&rsquo;t matter which is subtracted.) However, having students write out the full
+test and result gets them thinking about what exactly is being tested in each branch of the function.</p><p>It is possible to avoid using a conditional entirely by taking the absolute value of the difference
+(the function <tt>abs</tt> does this); if you are working with older students who already know about
+absolute value you could show it. Using <tt>cond</tt>, however, emphasizes how code structure arises
+from examples.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">The Distance Formula</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Reinforce their understanding of the distance formula</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will write the distance function</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_The%20Distance%20Formula15039"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">The Distance Formula
+
+
+
+<span class="time">(Time 20 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Unfortunately you don&rsquo;t have any code to calculate the distance in two dimensions.
+All you have so far is something that tells you the length in only the x- or y-dimension.
+<img src="pict_3.png" alt="image" width="200" height="200"/>
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>How could you find the distance between the two points shown
+in this image?</p></li><li><p>How could you find the length of the dotted line, also
+called the <span class="vocab">Hypoteneuse</span>?</p></li></ul></div></div><div class="SIntrapara">Let&rsquo;s start with what we do know: the dotted line sort of makes a triangle, and we can
+find out the length of the other two sides, labeled "A," "B" and "C."
+</div><div class="SIntrapara"><div class="activity"><p>What is the line-length of A?</p></div></div><div class="SIntrapara">To make your life easier, you can use the function you already wrote: <tt>line-length</tt>.
+In this example, (line-length A) is 4 and (line-length B) is 3, but we still don&rsquo;t know C.</div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p>Ancient civilizations had the same problem: they also struggled to find the distance
+between points in two dimensions. Let&#8217;s work through a way to think about this problem:
+what expression computes the length of the hypoteneuse of a right triangle?</p></div><div class="teacher"><p>Pass out Pythagorean Proof materials [<a href="..\..\resources\images\pythag1.png">1</a>,
+ <a href="..\..\resources\images\pythag2.png">2</a>] to each group, and have them
+ review all of their materials:</p><ul><li><p>A large, white square with a smaller one drawn inside</p></li><li><p>Four gray triangles, all the same size</p></li></ul><p>Everyone will have a packet with the same materials, but each group&rsquo;s triangles are
+ a little different. The activity workes with triangles of all sizes, so each pair will
+ get to test it out on their own triangles. </p></div></li><li class="lessonItem"><div class="student"><p><img src="pict_4.png" alt="image" width="213" height="193"/>For any right triangle, it is possible to draw a picture
+ where the hypoteneuse is used for all four sides of a square. In the diagram shown
+ here, the white square is surrounded by four gray, identical right-triangles, each
+ with sides A and B. The square itself has four identical sides of length C, which
+ are the hypoteneuses for the triangles. If the area of a square is expressed by
+ <script type="math/tex">side * side</script>, then the area of the white space is <script type="math/tex">C^{2}</script>.</p></div><div class="teacher"><p>Have students place their gray triangles onto the paper, to match the diagram.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><img src="Pythag_anim.gif" alt="" width="200" height="200"/> By moving the gray triangles, it is possible
+ to create two rectangles that fit inside the original square. While the space
+ taken up by the triangles has shifted, it hasn&rsquo;t gotten any bigger or smaller.
+ Likewise, the white space has been broken into two smaller squares, but in total
+ it remains the same size. By using the side-lengths A and B, one can calculate
+ the area of the two squares.
+ </div><div class="SIntrapara"><div class="activity"><p>What is the area of the smaller square? The larger square?</p></div></div></p></div><div class="teacher"><p>You may need to explicitly point out that the side-lengths of the triangles can be
+used as the side-lengths of the squares.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><img src="pict_5.png" alt="image" width="217" height="203"/>The smaller square has an area of <script type="math/tex">A^{2}</script>, and the
+ larger square has an area of <script type="math/tex">B^{2}</script>. Since these squares are just the original
+ square broken up into two pieces, we know that the sum of these areas must be equal
+ to the area of the original square:
+ <div class="banner"><script type="math/tex">A^{2} + B^{2} = C^{2}</script></div>
+ </div><div class="SIntrapara"><div class="activity"><p>Does the same equation work for any values of A and B?</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p>To get C by itself, we take the square-root of the sum of the areas:
+<div class="banner"><script type="math/tex">\sqrt{A^{2} + B^{2}} = C</script></div>
+Pythagoras proved that you can get the square of the hypotenuse by adding the squares
+of the other two sides. In your game, you&rsquo;re going to use the horizontal and vertical
+distance between two characters as the two sides of your triangle, and use the
+Pythagorean theorem to find the length of that third side.</p></div><div class="teacher"><p>Remind students that A and B are the horizontal and vertical lengths, which are
+calculated by <tt>line-length</tt>.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><ul><li><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 37</a>
+of your workbook - you&rsquo;ll see the formula written out.</p></li><li><p>Draw out the circle of evaluation, starting with the
+simplest expression you can see first.</p></li><li><p>Once you have the circle of evaluation, translate it
+into racket code at the bottom of the page, starting
+with <tt>(EXAMPLE (distance 4 2 0 5) ...)</tt></p></li></ul></div></div><div class="SIntrapara">Now you&rsquo;ve got code that tells you the distance between the points (4, 2) and (0, 5).
+ But we want to have it work for <span style="font-style: italic">any</span> two points. It would be great if we had a
+ function that would just take the x&rsquo;s and y&rsquo;s as input, and do the math for us.</div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><ul><li><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 38</a>,
+ and read the problem statement and function header
+ carefully.</p></li><li><p>Use the Design Recipe to write your distance function.
+Feel free to use the work from the previous page as your
+first example, and then come up with a new one of your own.</p></li><li><p>When finished, type your <tt>line-length</tt> and
+<tt>distance</tt> functions into your game, and see what happens.</p></li><li><p>Does anything happen when things run into each other?</p></li></ul></div></div><div class="SIntrapara">You still need a function to check whether or not two things are colliding.</div></p></div><div class="teacher"><p>Pay careful attention to the order in which the coordinates are given to the
+<tt>distance</tt> function. The player&rsquo;s x-coordinate (<tt>px</tt>) must be given first,
+followed by the player&rsquo;s y (<tt>py</tt>), character&rsquo;s x (<tt>cx</tt>), and character&rsquo;s y
+(<tt>cy</tt>). Inside the body of the function, <tt>line-length</tt> can only calculate
+lengths on the same axis (<tt>(line-length px cx)</tt> and <tt>(line-length cx cy)</tt>).
+Just like with making data structures, order matters, and the distance function will
+not work otherwise. Also be sure to check that students are using <tt>sq</tt> and
+<tt>sqrt</tt> in the correct places. </p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Collide?</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will write the collide? function</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Collide%3F15040"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Collide?
+
+
+
+<span class="time">(Time 10 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">So what do we want to do with this distance?
+</div><div class="SIntrapara"><div class="activity"><p>How close should your danger and your player be, before they hit
+each other?</p></div></div><div class="SIntrapara">At the top of <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 39</a> you&rsquo;ll find the
+Word Problem for <tt>collide?</tt>.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>Fill in the Contract, two EXAMPLES, and then write the
+code. Remember: you WILL need to make use of the
+<tt>distance</tt> function you just wrote!</p></li><li><p>When you&rsquo;re done, type it into your game, under
+<tt>collide?</tt>.</p></li></ul></div></div></p></div><div class="teacher"><p>Using visual examples, ask students to guess the distance between a danger
+and a player at different positions. How far apart do they need to be before
+one has hit the other?</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">update-world</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Identify collision as yet another sub-domain which requires different behavior of the update-world function</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will use different Cond branches to identify collisions in their games</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_update-world15041"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">update-world
+
+
+
+<span class="time">(Time 40 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now that you have a function which will check whether something is colliding,
+you can go back to modifying Ninja World.
+</div><div class="SIntrapara"><div class="activity"><p>Out of the four major functions in the game (<tt>update-world</tt>,
+<tt>draw-world</tt>, <tt>keypress</tt>, and <tt>big-bang</tt>), which
+do you think you&rsquo;ll need to edit to handle collisions?</p></div></div><div class="SIntrapara">We&rsquo;ll need to make some more branches for <tt>cond</tt> in <tt>update-world</tt>.
+What should happen when the cat collides with the dog? We want to put the dog
+offscreen, so that he can come back to attack again.</div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><ul><li><p>Start with the test: how could you check whether the
+cat and dog are colliding? Have you written a function
+to check that?</p></li><li><p>What do the inputs need to be?</p></li><li><p>How do you get the <tt>catY</tt> out of the world?</p></li><li><p>What about the Cat&rsquo;s x-coordinate? She&rsquo;s always in the
+center of the screen, so what will her x-coordinate
+always be?</p></li><li><p>How do you get the <tt>dogX</tt> out of the world?</p></li><li><p>Is there a <tt>dogY</tt> in the world? Where in the
+game can you look to get that number? (Hint: in which
+function do you <span style="font-style: italic">draw</span> the images on the game
+screen?)</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+[(collide? 360 (world-catY w) (world-dogX w) 400) ...result...]
+</textarea>
+Remember that <tt>update-world</tt> gives back a world, so what function should come first in our result?
+&nbsp;<textarea>
+[(collide? 360 (world-catY w) (world-dogX w) 400) (make-world ...dogX...
+                                                              ...rubyX...
+                                                              ...catY...)]
+</textarea>
+                                </div><div class="SIntrapara"><div class="activity"><p>And what should happen when the cat and dog collide? Can you think of a
+number that puts the dog off the screen on the left side?</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+[(collide? 360 (world-catY w) (world-dogX w) 400) (make-world -100
+                                                              ...rubyX...
+                                                              ...catY...)]
+</textarea>
+                                </div><div class="SIntrapara"><div class="activity"><p>Does the <tt>rubyX</tt> change when the dog and cat collide? How about
+<tt>catY</tt>? How do you get each of those things out of the world?</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+[(collide? 360 (world-catY w) (world-dogX w) 400) (make-world -100
+                                                              (world-rubyX w)
+                                                              (world-catY w))]
+</textarea></div></p></div><div class="teacher"><p>Collision detection must be part of the <tt>update-world</tt> function because the
+game should be checking for a collision <span style="font-style: italic">every time</span> the world is updated. Students may
+assume that <tt>draw-world</tt> should handle collision detection, but point out that the
+Range of <tt>draw-world</tt> is an Image, and their function must return a new world in order to
+set the locations of the characters after a collision.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now it&rsquo;s time to handle collisions in your game...
+</div><div class="SIntrapara"><div class="activity"><p>Turn to <a href="..\..\resources\workbook\StudentWorkbook.pdf">Page 40</a> and write
+some more tests and results. What characters in your game could collide
+with each other? What should happen as a result? When you have written
+each test and result down, type it into your game.</p></div></div></p></div><div class="teacher"><p>Work in small groups to complete collision branches.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Closing</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Closing15042"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Closing
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>Congratulations! You&rsquo;ve finished every lesson, and now it&rsquo;s up to you to make your
+game even better. Take some time to brainstorm...what else do you want your game to
+do? Next unit you can add even more things, so that your games are even cooler.</p></div><div class="teacher"></div></li></ul></div></div></blockquote><p></p><div id="copyright"><a href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img src="pict_6.png" alt="image" width="88" height="31"/></a>Bootstrap by <a href="http://www.bootstrapworld.org/">Emmanuel Schanzer</a> is licensed under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons 3.0 Unported License</a>. Based on a work at <a href="http://www.bootstrapworld.org/">www.BootstrapWorld.org</a>. Permissions beyond the scope of this license may be available at <a href="mailto:schanzer@BootstrapWorld.org">schanzer@BootstrapWorld.org</a>.</div></div></div><div id="contextindicator">&nbsp;</div></body></html>

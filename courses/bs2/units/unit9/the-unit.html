@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"/><title>Unit 9: Completing Games</title><link rel="stylesheet" type="text/css" href="scribble.css" title="default"/><link rel="stylesheet" type="text/css" href="pretty-printing.css" title="default"/><link rel="stylesheet" type="text/css" href="codemirror.css" title="default"/><link rel="stylesheet" type="text/css" href="bootstrap.css" title="default"/><link rel="stylesheet" type="text/css" href="textbook.css" title="default"/><link rel="stylesheet" type="text/css" href="extra_curriculum.css" title="default"/><script type="text/javascript" src="scribble-common.js"></script><script type="text/javascript" src="codemirror.js"></script><script type="text/javascript" src="runmode.js"></script><script type="text/javascript" src="scheme2.js"></script><script type="text/javascript" src="bootstraplesson.js"></script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2Chttp%3A%2F%2Fwww.cs.wpi.edu%2F%7Ekfisler%2Fmathjaxlocal.js"></script><!--[if IE 6]><style type="text/css">.SIEHidden { overflow: hidden; }</style><![endif]--></head><body id="scribble-racket-lang-org"><div class="tocset"><div class="tocview"><div class="tocviewlist tocviewlisttopspace"><div class="tocviewtitle"><table cellspacing="0" cellpadding="0"><tr><td style="width: 1em;">&bull;</td><td></td><td><a href="" class="tocviewselflink" data-pltdoc="x">Unit 9:<span class="mywbr"> &nbsp;</span> Completing Games</a></td></tr></table></div></div></div><div class="tocsub"><table class="tocsublist" cellspacing="0"><tr><td><span class="tocsublinknumber"></span><a href="#%28part._.Unit_9__.Completing_.Games%29" class="tocsubseclink" data-pltdoc="x">Unit 9:<span class="mywbr"> &nbsp;</span> Completing Games</a></td></tr></table></div></div><div class="maincolumn"><div class="main"><a name="(part._.Unit_9__.Completing_.Games)"></a><p><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><noscript></noscript><script type="text/javascript" src="easyXDM.min.js"></script><noscript></noscript><script type="text/javascript" src="json2.min.js"></script><noscript></noscript><script type="text/javascript" src="bootstrap-helpers.js"></script><noscript></noscript></p><div class="headercontent"><span class="BootstrapTitle"><img src="pict.png" alt="image" width="150" height="150"/><span class="TitleUnitNum">Unit 9</span>Completing Games</span></div><div class="SubFlow" id="overviewDescr"><span class="BootstrapHeader">Unit Overview</span><p>This unit includes instructions for adding frequently-requested elements to students&rsquo; games, such as extra levels
+and a scoring system. Students comfortable with structures are encouraged to use nested structures in their games
+for more complexity.</p></div><blockquote class="OverviewBoundary"><iframe id="forum_embed"></iframe><div class="summary"><div class="" id="BootstrapAgenda"><p>Agenda</p><ul class="BootstrapAgendaList"><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Introduction15586"><span class="BSLessonName">Introduction</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">15 min</span><a href="#lesson_Randomizing%20Ninja%20World15587"><span class="BSLessonName">Randomizing Ninja World</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">35 min</span><a href="#lesson_Scoring%20and%20Levels15588"><span class="BSLessonName">Scoring and Levels</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">30 min</span><a href="#lesson_Challenge%3A%20Nested%20Structures15589"><span class="BSLessonName">Challenge: Nested Structures</span></a></p></li><li class="BootstrapAgendaListItem"><p><span class="BSLessonDuration">5 min</span><a href="#lesson_Closing15590"><span class="BSLessonName">Closing</span></a></p></li></ul></div><div id="ProductOutcomes" class=" "><span class="BootstrapHeader">Product Outcomes:</span><ul><li><p>Students will use the random function to make their game characters
+appear at different loations on the screen</p></li><li><p>Students will use nested structures to add complexity to their games</p></li></ul></div><div id="LearningObjectives" class=" "><span class="BootstrapHeader">Standards and Evidence Statements:</span><p>Standards with prefix BS are specific to Bootstrap; others are from the Common Core. Mouse over each standard to see its corresponding evidence statements. Our <a href="../../../../Standards.shtml">Standards Document</a> shows which units cover each standard. </p><ul class="LearningObjectivesList"></ul></div><span class="BootstrapHeader">Length: 90 minutes</span><p></p><div id="Materials" class=" "><span class="BootstrapHeader">Materials:</span><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li><li><p>The Ninja World 6 file [NW6.rkt from
+<a href="..\..\resources\source-files.zip">source-files.zip</a> |
+<a href="http://www.wescheme.org/openEditor?publicId=LPpLz5AKHd&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li><li><p>New background image for Ninja World level two [bg2.jpg from <a href="..\..\resources\source-files.zip">source-files.zip</a> or your own 640 x 480 image</p></li></ul></div><div id="Preparation" class=" "><span class="BootstrapHeader">Preparation:</span><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li></ul></div><div id="LanguageTable" class=" "><table cellspacing="0" cellpadding="0" class="thetable"><tr><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Types</p></td><td align="center" class="BootstrapTable"><p class="BootstrapTableHeader">Functions</p></td></tr><tr><td align="center" class="BootstrapTable"><p>Number</p></td><td align="center" class="BootstrapTable"><p><tt>+ - * / sq sqrt expt</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>String</p></td><td align="center" class="BootstrapTable"><p><tt>string-append string-length</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Image</p></td><td align="center" class="BootstrapTable"><p><tt>rectangle circle triangle ellipse radial-star scale rotate put-image</tt></p></td></tr><tr><td align="center" class="BootstrapTable"><p>Boolean</p></td><td align="center" class="BootstrapTable"><p><tt>= &gt; &lt; string=? and or</tt></p></td></tr></table></div><p><div id="lessonToolbar" class="fixed"><input type="button" value="Show Teacher Notes" onclick="toggleTeacherNotes(this);"></input><br/><input type="button" value="Discussion Group" onclick="showGroup()"/></div></p></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Introduction</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>Pens/pencils for the students, fresh whiteboard markers for teachers</p></li><li><p>Class poster (List of rules, design recipe, course calendar)</p></li><li><p>Editing environment (WeScheme or DrRacket with the bootstrap-teachpack installed)</p></li><li><p>Student workbooks</p></li><li><p>Language Table</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li><p>Seating arrangements: ideally clusters of desks/tables</p></li></ul></div></div><div class="segment"><p><a name="lesson_Introduction15586"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Introduction
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>Congratulations! You&rsquo;ve worked very hard throughout the last 8 lessons, and now your games
+are almost completed. Your player can move any way you want, you&rsquo;ve written the code to
+detect how far characters are from each other, and you&rsquo;ve defined a whole bunch of
+conditional cases for different actions in your game. Have you brainstormed some
+extra things you want to add to your game?</p></div><div class="teacher"><p>At this point in the course, students will have very different games, and will probably
+need individual help adding the finishing touches or extra elements. This unit includes
+ideas and instructions for frequently requested game elements (Using Ninja World as a
+template), but feel free to have your students get creative with their additions.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Randomizing Ninja World</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will use the random function to make their game characters
+appear at different loations on the screen</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>The Ninja World 6 file [NW6.rkt from
+<a href="..\..\resources\source-files.zip">source-files.zip</a> |
+<a href="http://www.wescheme.org/openEditor?publicId=LPpLz5AKHd&amp;" target="embedded">WeScheme</a> preloaded on students&rsquo; machines</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Randomizing%20Ninja%20World15587"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Randomizing Ninja World
+
+
+
+<span class="time">(Time 15 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">If you open up the <a href="http://www.wescheme.org/openEditor?publicId=LPpLz5AKHd&amp;" target="embedded">Ninja World</a>
+file, you&rsquo;ll see the (almost) completed game. However, right now the ruby and
+dog appear at the same part of the screen every time, making this a pretty
+easy game.
+</div><div class="SIntrapara"><div class="activity"><p>What will the y-coordinate of the dog always be? What about the ruby?</p></div></div><div class="SIntrapara">Instead of appearing at the top of the screen every time, what if you could
+make the dog show up at a random y-coordinate whenever it goes off the screen?
+Racket already has a function to give you a random number, which could represent
+a character&rsquo;s y-coordinate: <tt>random</tt>. <tt>random</tt> takes
+in one number as its domain, and returns a random number between 0 and that number.
+So if a game contains <tt>(random 480)</tt> in the code, it will return any number
+between 1 and 480.</div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">If you want the y-coordinate of the dog to change, you&rsquo;ll have to add it to the
+                      world structure.
+                      </div><div class="SIntrapara"><div class="activity"><p>Go back to the top of the page where the World is defined and add in
+a <tt>dogY</tt>. Don&rsquo;t forget to redefine your START and NEXT worlds,
+to account for the extra item in the world struct.</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+;; The World is the x and y positions of the dog, x position of the ruby, and y position of the cat
+(define-struct world (dogX dogY rubyX catY))
+</textarea>
+                      Right now the <tt>draw-world</tt> function draws the dog at its current
+                      x-coordinate, and a pre-set y-coordinate.
+                      </div><div class="SIntrapara"><div class="activity"><ul><li><p>At what y-coordinate is the dog drawn right now?</p></li><li><p>Now that <tt>dogY</tt> has been added to the world
+structure, how do you get the <tt>dogY</tt> out of the world?</p></li><li><p>Change the <tt>draw-world</tt> function so that it
+draws the dog at the current y-coordinate instead of 400.</p></li></ul></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The dog&rsquo;s y-coordinate should change when it leaves the screen.
+                       </div><div class="SIntrapara"><div class="activity"><ul><li><p>What function changes the game state depending on
+the game&rsquo;s conditions?</p></li><li><p>What does the first <tt>cond</tt> branch in
+<tt>update-world</tt> test?</p></li><li><p>If this test returns <tt>true</tt>, what happens?</p></li><li><p>Change the first <tt>cond</tt> branch in <tt>update-world</tt>
+so that if the cat collides with the dog, the dog&rsquo;s
+y-coordinate is resent to a random number between 0 and 480. </p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+[(collide? 320 (world-catY w) (world-dogX w) (world-dogY w)) (make-world -50
+                                                             (random 480)
+                                                             (world-rubyX w)
+                                                             (world-catY w))]
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Further down in <tt>update-world</tt>, you check to see if the dog has gone
+off the right side of the screen.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>If this test evaluates to <tt>true</tt>, to what x-coordinate
+does the dog return?</p></li><li><p>Change this <tt>cond</tt> branch so that the dog&rsquo;s
+y-coordinate is added to the world, as a random number
+between 0 and 480.</p></li></ul></div></div></p><p>Be sure to go through your code carefully- since you changed the world structure to
+include a <tt>dogY</tt>, you&rsquo;ll need to make sure it&rsquo;s included every time you call
+<tt>make-world</tt>, <span style="font-weight: bold">and</span> every time a function takes in the y-coordinate of
+the dog. Once the dog is reappearing randomly when it leaves the screen, you can
+make the same changes to the ruby&rsquo;s y-coordinate to make it appear randomly, or
+add this concept to your own game.</p></div><div class="teacher"><p>Pay particular attention to the use of <tt>distance</tt> and <tt>collide?</tt> in the
+<tt>update-world</tt> function: They take in the dog&rsquo;s y-coordinate, but it is
+currently hard-coded to always be <tt>400)</tt>. Make sure students realize that every
+function that uses the dog&rsquo;s y-coordinate must now get that value from the world
+structure, using <tt>(world-dogY w)</tt>.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Scoring and Levels</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Students will add a scoring system to their games</p></li><li><p>Students will add levels to their games</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul><li><p>New background image for Ninja World level two [bg2.jpg from <a href="..\..\resources\source-files.zip">source-files.zip</a> or your own 640 x 480 image</p></li></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Scoring%20and%20Levels15588"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Scoring and Levels
+
+
+
+<span class="time">(Time 35 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>Ninja World is looking good, but right now there&rsquo;s not a lot of variety.
+The player avoids the dog and gets the ruby over and over again. We should
+mix things up a bit: how about adding new levels? Typically a game would
+progress to a new level if the player has reached a certain goal: Collected
+a certain number of rubies, destroyed a certain number of zombies, or reached
+a certain score. Let&rsquo;s start by adding a scoring system to the Ninja World game.</p></div><div class="teacher"><p>Both the scoring system and randomizing the y-coordinates of the target and danger
+were part of the included teachpack in Bootstrap 1, code which ran "under the hood"
+in students&rsquo; first Bootstrap game. Let them know that in Bootstrap 2, they no longer
+<span style="font-style: italic">need</span> this hidden code, because they&rsquo;ve learned enough to program the entire
+game (and more!) themselves.</p></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The score is something that will be changing in the game, so you can be
+                                 sure that it has to be added to the world structure.
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>What data type is the score? Number, String,
+Image, or Boolean?</p></li><li><p>What will be the score in the <tt>START</tt> world?</p></li><li><p>Change the world structure so it includes a
+<tt>score</tt>.</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+;; The World is the x and y positions of the dog, x position of the ruby,
+;; y position of the cat, and the player's score
+(define-struct world (dogX dogY rubyX catY score))
+</textarea>
+                                 Remember: Since the world structure is changing, you now have to go through
+                                 your game code- every time you make a world, the score must be included in
+                                 that world. </div><div class="SIntrapara"><div class="activity"><p>How do you get the <tt>score</tt> out of the world?</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now that the game has a score, it needs to be able to increase or decrease.
+                                 In Ninja World, the score should go up by 30 points when Ninja Cat collides
+                                 with the target, and down by 20 points when colliding with the danger.
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>Which of the <tt>cond</tt> branches in
+             <tt>update-world</tt> checks these conditions?</p></li><li><p>How would you decrease the <tt>score</tt> by 20 if
+the player collides with the danger?</p></li></ul></div></div></p><p>&nbsp;<textarea>
+(define (update-world w)
+(cond
+[(collide? 320 (world-catY w) (world-dogX w) (world-dogY w)) (make-world -50
+                                                                       (random 480)
+                                                                       (world-rubyX w)
+                                                                       (world-catY w)
+                                                                     (-(world-score w) 20))]))
+</textarea></p><div class="activity"><p>On the next cond branch, make the score increase by 30 points
+when the cat collides with the ruby.</p></div></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The scoring system is in place, but how will the player know what their score is? You&rsquo;ll need
+to display the score on the game screen.
+</div><div class="SIntrapara"><div class="activity"><p>Which function handles how the world is drawn?</p></div></div><div class="SIntrapara">In <tt>draw-world</tt>, images are placed onto the background using <tt>put-image</tt> to draw the
+game. But the score is represented by a Number: we need a way to represent it as an Image.
+Thankfully, Racket has some built-in functions that can help with this: the function
+<tt>number-&gt;string</tt> takes in a Number for its domain and returns a String representation
+of that number. This string can then be passed to the <tt>text</tt> function to return an
+Image that can then be used in <tt>draw-world</tt>.
+</div><div class="SIntrapara"><div class="activity"><p>Copy the following contracts into your workbook:</p><ul><li><p><tt>; number-&gt;string : Number -&gt; String</tt></p></li><li><p><tt>; text : String Number String -&gt; Image</tt></p></li><li><p>How would you use the <tt>number-&gt;string</tt> and <tt>text</tt>
+functions together to draw the score into the world?</p></li><li><p>How do you get the <tt>score</tt> out of the world?</p></li><li><p>How large should the text of the score be? Where should it be
+placed on your game scene?</p></li></ul></div></div><div class="SIntrapara">The expression:
+&nbsp;<textarea>
+(put-image (text (number-&gt;string (world-score w)) 30 "purple")
+                  320 240
+                  BACKGROUND)
+</textarea>
+ will place the score (drawn in size 30 purple text) onto the center of the BACKGROUND.</div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Ninja World has a visible scoring system: Now it&rsquo;s time to add some levels. For
+this example, you&rsquo;ll make the game have a different background image when
+the player progresses to the next level. The player will reach level two
+when his or her score is greater than 500.
+</div><div class="SIntrapara"><div class="activity"><p>Where do you define the <tt>BACKGROUND</tt> image? Keep the original
+background for the first level, but define a new variable,
+<tt>BACKGROUND2</tt>, that will be used for level 2.</p></div></div><div class="SIntrapara">Now that you have another background image, it needs to be drawn into the
+game- but <span style="font-weight: bold">only</span> when a certain condition is met.
+</div><div class="SIntrapara"><div class="activity"><ul><li><p>What must be true for the player to progress to
+level 2 in the game?</p></li><li><p>Which function handles the way the game looks?</p></li><li><p>What is the only thing different in level 2 of Ninja World?</p></li></ul></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">The only thing that changes at level 2 is the way the game <span style="font-style: italic">looks</span>:
+                                 specifically, the background image. Because the background only changes when
+                                 a certain condition is met, you&rsquo;ll need to change the <tt>draw-world</tt>
+                                 function so that it uses <tt>cond</tt>. Leave the current code alone for now
+                                 and start right under <tt>(define (draw-world w))</tt>.
+                                 </div><div class="SIntrapara"><div class="activity"><ul><li><p>What is the first thing to write, to let the computer
+know that this will be a function with different
+conditions?</p></li><li><p>What is the first condition to check? (Hint: is
+the sore large enough to progress to level 2?)</p></li></ul></div></div><div class="SIntrapara">&nbsp;<textarea>
+(define (draw-world w)
+           (cond
+           [(&gt; (world-score w) 500) (.....)]))
+</textarea></div></p><p><div class="SIntrapara">If this test evaluates to <tt>true</tt>, the result will look similar to the
+                                 code you already have for draw-world, starting with <tt>put-image</tt>.
+                                 </div><div class="SIntrapara"><div class="activity"><p>What is the one thing that needs to change?</p></div></div><div class="SIntrapara">Instead of putting all your images on top of <tt>BACKGROUND</tt>, you&rsquo;ll put
+                                 them over <tt>BACKGROUND2</tt>, your new background image:
+&nbsp;<textarea>
+(define (draw-world w)
+ (cond
+ [(&gt; (world-score w) 500) (put-image PLAYER
+                                    320 (world-catY w)
+                                        (put-image TARGET
+                                               (world-rubyX w) 300
+                                                     (put-image CLOUD
+                                                                500 400
+                                                               (put-image DANGER
+                                                               (world-dogX w) (world-dogY w)
+                                                               BACKGROUND2))))]))
+</textarea></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara"><div class="activity"><p>Don&rsquo;t forget to add an <tt>else</tt> clause before your original code,
+right underneath what you just wrote. If the score is <span style="font-weight: bold">not</span>
+greater than 500, the world will be drawn with the images on the
+original background.</p></div></div><div class="SIntrapara">&nbsp;<textarea>
+[else
+(put-image PLAYER
+ 320 (world-catY w)
+        (put-image TARGET
+        (world-rubyX w) 300
+              (put-image CLOUD
+               500 400
+                   (put-image DANGER
+                   (world-dogX w) (world-dogY w)
+                          BACKGROUND))))]
+</textarea></div></p><p>Now Ninja World has a level 2! You can use the same process to add more levels
+             when the score gets even higher. Maybe instead of the background changing, you
+             can have the player transform, or make the game more difficult by making the
+             danger move faster.</p></div><div class="teacher"><p>These modifications can be seen in action in the
+ <a href="http://www.wescheme.org/openEditor?publicId=ZTt2BzE0UX&amp;" target="embedded">Completed Ninja World file</a>,
+ or NWComplete.rkt from <a href="..\..\resources\source-files.zip">source-files.zip</a>.</p><p>Some more options for students who finish early:</p><ul><li><p>Change the update-world function so that the danger and
+target move faster if the score is greater than 500.</p></li><li><p>Use the text function to display a game over message
+on the screen when the score drops below 0.</p></li><li><p>Change the images of all the game characters when the
+player progresses to the next level.</p></li></ul></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Challenge: Nested Structures</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul><li><p>Reinforce understanding of structures as they are used in their games</p></li></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul><li><p>Students will use nested structures to add complexity to their games</p></li></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Challenge%3A%20Nested%20Structures15589"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Challenge: Nested Structures
+
+
+
+<span class="time">(Time 30 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p><div class="SIntrapara">Now that you know about data structures and how to use them, you can have games
+                that are even more complex. For example, you could make a game with many different
+                characters by making each character their own data structure.
+&nbsp;<textarea>
+;; A character is an image, speed, x-coordinate, and y-coordinate.
+(define-struct character (image speed x y))
+
+(define DOG (make-character DANGER 10 -50 400))
+(define CAT (make-character PLAYER 20 320 240))
+(define RUBY (make-character TARGET 10 690 300))
+</textarea>
+                </div><div class="SIntrapara"><div class="activity"><p>Define a character struct and some example characters for your own game.
+They don&rsquo;t have to follow the same pattern- your characters can have a
+health property instead of a speed, for example. Just be sure your newly
+defined characters have the same properties as the character structure
+you define.</p></div></div></p></div><div class="teacher"></div></li><li class="lessonItem"><div class="student"><p><div class="SIntrapara">If each character is now its own structure, what will the world look like? Something like:
+&nbsp;<textarea>
+;; The World is three characters: (dog, cat, ruby) and a score
+(define-struct world (c1 c2 c3 score))
+</textarea>
+                      </div><div class="SIntrapara"><div class="activity"><p>Why is it important to use variable names (<tt>c1</tt>, <tt>c2</tt>,
+and <tt>c3</tt>) instead of just defining the world struct to include
+specific characters (<tt>DOG</tt>, <tt>CAT</tt>, <tt>RUBY</tt>)?</p></div></div><div class="SIntrapara">Variables are used in structs for the same reason variables are used in functions:
+                      we want to be able to change the value of those characters later. When
+                      you define the first world, you can then make your predefined character structs
+                      part of that world:
+                      <tt>(define START (make-world DOG CAT RUBY))</tt>
+                      Of course, you need some way to access parts of each character struct, even if
+                      it&rsquo;s inside another struct. This is just like accessing any part of a struct.
+                      </div><div class="SIntrapara"><div class="activity"><ul><li><p>How do you get the first character out of the starting world?</p></li><li><p>What will that expression evaluate to?</p></li><li><p>How would you get the speed out of the resulting character?</p></li><li><p><tt>(character-speed (world-c1 START))</tt></p></li></ul></div></div><div class="SIntrapara">For even more of a challenge, every level in the game can be its own structure. A level
+                      could have a background image, characters, a boolean value representing wheather the
+                      player has collided with another character, or anything you like!</div></p></div><div class="teacher"><p>Using many nested structures can get tricky: if a student is struggling, have them draw
+the circles of evaluation for their expressions.</p></div></li></ul></div></div></blockquote><blockquote class="LessonBoundary"><span class="BootstrapPageTitle">Closing</span><div class="content"><div class="overview"><span class="BootstrapLogo"><p><img src="logo.png" alt="bootstrap logo" width="150" height="150"/></p></span><span class="BootstrapLessonTitle"><span class="BSLessonName"><p>Overview</p></span></span><div class="LessonLearningObjectives"><p><span style="font-weight: bold">Learning Objectives</span></p><ul></ul></div><div class="LessonEvidenceStatements"><p><span style="font-weight: bold">Evidence Statements</span></p><ul></ul></div><div class="LessonProductOutcomes"><p><span style="font-weight: bold">Product Outcomes</span></p><ul></ul></div><div class="LessonMaterials"><p><span style="font-weight: bold">Materials</span></p><ul></ul></div><div class="LessonPreparation"><p><span style="font-weight: bold">Preparation</span></p><ul><li></li></ul></div></div><div class="segment"><p><a name="lesson_Closing15590"></a><span></span></p><span class="BootstrapLessonTitle"><span class="BSLessonName">Closing
+
+
+
+<span class="time">(Time 5 minutes)</span>
+
+</span><p></p></span><ul class="lesson"><li class="lessonItem"><div class="student"><p>Congratulations! You started from scratch, and now have a working videogame!
+We hope you&#8217;ll continue worlding on these games, keep hacking, and keep learning!</p></div><div class="teacher"><p>Have students show each other their completed games!</p></div></li></ul></div></div></blockquote><p></p><div id="copyright"><a href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img src="pict_2.png" alt="image" width="88" height="31"/></a>Bootstrap by <a href="http://www.bootstrapworld.org/">Emmanuel Schanzer</a> is licensed under a <a href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons 3.0 Unported License</a>. Based on a work at <a href="http://www.bootstrapworld.org/">www.BootstrapWorld.org</a>. Permissions beyond the scope of this license may be available at <a href="mailto:schanzer@BootstrapWorld.org">schanzer@BootstrapWorld.org</a>.</div></div></div><div id="contextindicator">&nbsp;</div></body></html>
