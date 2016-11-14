@@ -1,0 +1,1 @@
+("6.2" ("0071425978bfa8ebddb06977c109fead9204aaaf" . "0196505b9a53fd1663adf7c30b35d389ec50c703") (collects #"whalesong" #"lang" #"whalesong.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"whalesong" #"image.rkt") #"/home/helio/Codigo/helioh2.github.io/trabalhos-oficina/pacman-edgar-lucas/constantes.rkt" (collects #"whalesong" #"lang" #"reader.rkt"))

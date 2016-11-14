@@ -1,0 +1,82 @@
+#lang whalesong
+
+;; Arquivo para definição das constantes do programa.
+
+(require whalesong/world)
+(require whalesong/image)
+;inclua outros pacotes ou arquivos necessários usando (require ...)
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
+
+;; =================
+;; Constantes:
+(define ALTURA-MAPA 400)
+(define COMP-MAPA 400)
+(define PAC-MAN-DECENDO(rotate 270(scale 0.02 (bitmap/url "imagens/Pac-Man.png"))))
+(define PAC-MAN-VOLTANDO(rotate 180(scale 0.02 (bitmap/url "imagens/Pac-Man.png"))))
+(define PAC-MAN-CIMA(rotate 90(scale 0.02 (bitmap/url "imagens/Pac-Man.png"))))
+(define PAC-MAN-NORMAL(scale 0.02 (bitmap/url "imagens/Pac-Man.png")))
+(define MAPA (empty-scene COMP-MAPA ALTURA-MAPA))
+(define FANTASMAS (scale 0.162 (bitmap/url "imagens/Fantasma.png")))
+(define FANTASMAS-ASUSTADO (scale 0.162 (bitmap/url "imagens/Fantasma2.png")))
+(define VEL-PACMAN-INO 2)
+(define VEL-PACMAN-VOLTANDO -2)
+(define VEL-FAN-INO 1)
+(define VEL-FAN-VOLTANDO -1)
+(define METADE-BLOCO 10)
+(define METADE-PAC (/ (image-width PAC-MAN-NORMAL) 2))
+(define METADE-FAN (/ (image-width FANTASMAS) 2))
+(define METADE-BONUS 5)
+(define METADE-PONTO 2.5)
+(define TEXTO-GAME-OVER (text "GAME OVER" 30 "red"))
+(define IMG-GAME-OVER
+  (place-image TEXTO-GAME-OVER (/ COMP-MAPA 2) (/ ALTURA-MAPA 2) MAPA))
+(define TEMPO-PODER 200)
+(define VALOR-DO-PONTO 5)
+(define VALOR-DO-BONUS 15)
+
+
+
+(define POS-1A (/ ALTURA-MAPA 4)) ;; Coordenadas de posição para a inserção do bloco1
+(define POS-1C (/ COMP-MAPA 4))   ;; Coordenadas de posição para a inserção do bloco1
+(define POS-2A (/ ALTURA-MAPA 1.5))
+(define POS-2C (/ COMP-MAPA 4))
+(define POS-3A (/ ALTURA-MAPA 4))
+(define POS-3C (/ COMP-MAPA 1.5))
+(define POS-4A (/ ALTURA-MAPA 1.5))
+(define POS-4C (/ COMP-MAPA 1.5))
+(define POS-0A (/ COMP-MAPA 2))
+(define POS-0C (/ ALTURA-MAPA 2))
+
+;; Parede é (make-parede(x y) Numero)
+;;(define bloco1(make-parede 300 10 ))
+
+
+;;(define bloco-mapa1(place-image bloco1 POS-4C POS-4A mapa-beta)) ;; Inserção da imagem dentro do mapa
+  
+        
+;;(define METADE-BLOCO (/ (image-width bloco1) 2))
+
+
+
+
+
+
+
+
+
+
+
+  
+;(define PAC-MAN-INI (make-pacman 0 0 0 0 #f))
+  
+
+
+  
+
+  
+  
+  
+
+  
+
+
