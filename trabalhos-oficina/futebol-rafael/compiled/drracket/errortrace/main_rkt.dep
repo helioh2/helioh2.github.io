@@ -1,0 +1,1 @@
+("5.3.6" ("64c861fe102eb0bf726057b19643c13fcc03ced4" . "c994bc48de24cd1b20f8df64058a906da17f3575") #"/home/rafael/futebol-racket1/jogo.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"2htdp" #"universe.rkt") (collects #"racket" #"main.rkt") #"/home/rafael/futebol-racket1/dados.rkt" (collects #"racket" #"lang" #"reader.rkt"))

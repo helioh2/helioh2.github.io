@@ -1,0 +1,12 @@
+CACHE MANIFEST
+## Timestamp: Monday, November 14th, 2016 7:09:47pm
+main.js
+main_1.js
+optimer-normal-normal.js
+canvas.text.js
+excanvas.js
+main-module-manifest.js
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*

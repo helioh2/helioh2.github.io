@@ -1,0 +1,20 @@
+(jogo-jogadores JOGOINICIAL1)
+
+(first(jogo-jogadores JOGOINICIAL1))
+
+null?
+first rest
+car cdr
+
+(cons 1 2)
+(1 . 2)
+
+> (list? '(1 2))
+#t
+
+>(build-list 5 (lambda (x) (* x x)))
+
+(length (list 1 2 3 4))
+(length (jogo-jogadores JOGO-INICIAL6))
+
+(list-ref (jogo-jogadores JOGO-INICIAL6) 0)
