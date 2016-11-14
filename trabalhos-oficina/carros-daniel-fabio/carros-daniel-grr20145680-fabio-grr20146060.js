@@ -14506,22 +14506,18 @@ M.a=1;
 M.c.push(new RT.CallFrame(_139,M.p));
 return(_125)(M);};
 
-var _123=function(M){if(--M.cbt<0){throw _123;}
+var _333=function(M){if(--M.cbt<0){throw _333;}
 
-//"lambda body for do-it"
+//"lambda body for unknown"
 
-M.e.push(M.p.closedVals[0]);
 M.e.push(void(0),void(0));
-//"Constant toplevel ref: ?"
-
-M.p=M.e[M.e.length-3][1];
-M.e[M.e.length-1]=M.e[M.e.length-4];
-M.e[M.e.length-2]=M.e[M.e.length-5];
+M.e[M.e.length-1]=M.e[M.e.length-3];
+M.e[M.e.length-2]=0;
+M.p=_334_c;
 M.a=2;
-RT.checkClosureAndArity(M);
-M.e.splice(M.e.length-5,3);
+M.e.splice(M.e.length-3,1);
 M.c[M.c.length-1].p=M.p;
-return((M.p).label)(M);};
+return(_334)(M);};
 
 var _130=function(M){M.c.push(new RT.CallFrame(_132,M.p)); M.addPrompt(RT.DEFAULT_CONTINUATION_PROMPT_TAG,false,M.e.length);
 M.e.push([M.globals["and"]!==void(0)?M.globals["and"]:M.params.currentNamespace.get("and"),false,false]);M.e[M.e.length-1].names=["and",false,false];
@@ -14807,18 +14803,22 @@ M.p=M.c[M.c.length-1].label;
 M.c.pop();
 return(M.p)(M);}};
 
-var _333=function(M){if(--M.cbt<0){throw _333;}
+var _123=function(M){if(--M.cbt<0){throw _123;}
 
-//"lambda body for unknown"
+//"lambda body for do-it"
 
+M.e.push(M.p.closedVals[0]);
 M.e.push(void(0),void(0));
-M.e[M.e.length-1]=M.e[M.e.length-3];
-M.e[M.e.length-2]=0;
-M.p=_334_c;
+//"Constant toplevel ref: ?"
+
+M.p=M.e[M.e.length-3][1];
+M.e[M.e.length-1]=M.e[M.e.length-4];
+M.e[M.e.length-2]=M.e[M.e.length-5];
 M.a=2;
-M.e.splice(M.e.length-3,1);
+RT.checkClosureAndArity(M);
+M.e.splice(M.e.length-5,3);
 M.c[M.c.length-1].p=M.p;
-return(_334)(M);};
+return((M.p).label)(M);};
 
 var _335=function(M){M.c.push(new RT.CallFrame(_337,M.p)); M.addPrompt(RT.DEFAULT_CONTINUATION_PROMPT_TAG,false,M.e.length);
 M.e.push([]);M.e[M.e.length-1].names=[];
@@ -14829,6 +14829,17 @@ M.e.splice(M.e.length-((M.a-1)+1),1);
 M.p=M.c[M.c.length-1].label;
 M.c.pop();
 return(M.p)(M);};
+
+var _295=function(M){M.e.push(void(0),void(0));
+M.e[M.e.length-1]=M.e[M.e.length-4];
+M.e[M.e.length-2]=(RT.testArgument(M,"caarpair",RT.isCaarPair,M.e[M.e.length-5],0,"caar")).first.first;
+M.v=(M.e[M.e.length-1]===M.e[M.e.length-2]);
+M.e.length-=2;
+if(M.v===false){return(_297)(M);}else{M.v=RT.checkedCar(M, M.e[M.e.length-3]);
+M.e.length-=3;
+M.p=M.c[M.c.length-1].label;
+M.c.pop();
+return(M.p)(M);}};
 
 var _52=function(M){M.e.push(void(0),void(0));
 M.e.push(void(0));
@@ -14902,19 +14913,7 @@ var _307=function(M){if(--M.cbt<0){throw _307;}
 M.e.length-=(M.a-1);
 return(_308)(M);};
 
-var _195=function(M){M.e.push(M.e[M.e.length-3]);
-M.p=_186_c;
-M.a=1;
-M.c.push(new RT.CallFrame(_204,M.p));
-return(_186)(M);};
-
-var _305=function(M){if(--M.cbt<0){throw _305;}
-
-//"lambda body for assv"
-
-M.e.push(M.p.closedVals[0]);
-M.v=(M.e[M.e.length-3]===RT.NULL);
-if(M.v===false){return(_309)(M);}else{M.v=false;
+var _197=function(M){if(M.v===false){return(_195)(M);}else{M.v=RT.NULL;
 M.e.length-=3;
 M.p=M.c[M.c.length-1].label;
 M.c.pop();
@@ -15013,17 +15012,6 @@ M.p=M.c[M.c.length-1].label;
 M.c.pop();
 return(M.p)(M);};
 
-
-var _295=function(M){M.e.push(void(0),void(0));
-M.e[M.e.length-1]=M.e[M.e.length-4];
-M.e[M.e.length-2]=(RT.testArgument(M,"caarpair",RT.isCaarPair,M.e[M.e.length-5],0,"caar")).first.first;
-M.v=(M.e[M.e.length-1]===M.e[M.e.length-2]);
-M.e.length-=2;
-if(M.v===false){return(_297)(M);}else{M.v=RT.checkedCar(M, M.e[M.e.length-3]);
-M.e.length-=3;
-M.p=M.c[M.c.length-1].label;
-M.c.pop();
-return(M.p)(M);}};
 
 var _384=function(M){RT.Primitives["values"]=RT.Primitives["values"]||_385_c;
 return(_388)(M);};
@@ -15172,6 +15160,12 @@ M.p=M.c[M.c.length-1].label;
 M.c.pop();
 return(M.p)(M);}};
 
+var _195=function(M){M.e.push(M.e[M.e.length-3]);
+M.p=_186_c;
+M.a=1;
+M.c.push(new RT.CallFrame(_204,M.p));
+return(_186)(M);};
+
 var _3=function(M){if(--M.cbt<0){throw _3;}
 
 //"lambda body for loop"
@@ -15182,7 +15176,13 @@ M.a=1;
 M.c.push(new RT.CallFrame(_21,M.p));
 return(_4)(M);};
 
-var _197=function(M){if(M.v===false){return(_195)(M);}else{M.v=RT.NULL;
+var _305=function(M){if(--M.cbt<0){throw _305;}
+
+//"lambda body for assv"
+
+M.e.push(M.p.closedVals[0]);
+M.v=(M.e[M.e.length-3]===RT.NULL);
+if(M.v===false){return(_309)(M);}else{M.v=false;
 M.e.length-=3;
 M.p=M.c[M.c.length-1].label;
 M.c.pop();
@@ -16280,30 +16280,30 @@ var _callCCEntry_c=new RT.Closure(_callCCEntry,1,void(0),"call/cc");
 var _370_c=new RT.Closure(_370,2,void(0),"unknown");
 var _7_c=new RT.Closure(_7,1,void(0),"rest-lists");
 var _188_c=new RT.Closure(_188,1,void(0),"rest-lists");
-var _6_c=new RT.Closure(_6,1,void(0),"first-tuple");
 var _128_c=new RT.Closure(_128,1,void(0),"rest-lists");
 var _187_c=new RT.Closure(_187,1,void(0),"first-tuple");
-var _5_c=new RT.Closure(_5,1,void(0),"some-empty?");
+var _6_c=new RT.Closure(_6,1,void(0),"first-tuple");
 var _127_c=new RT.Closure(_127,1,void(0),"first-tuple");
 var _186_c=new RT.Closure(_186,1,void(0),"some-empty?");
 var _68_c=new RT.Closure(_68,1,void(0),"rest-lists");
+var _5_c=new RT.Closure(_5,1,void(0),"some-empty?");
 var _4_c=new RT.Closure(_4,1,void(0),"all-empty?");
-var _126_c=new RT.Closure(_126,1,void(0),"some-empty?");
 var _185_c=new RT.Closure(_185,1,void(0),"all-empty?");
-var _67_c=new RT.Closure(_67,1,void(0),"first-tuple");
+var _3_c=new RT.Closure(_3,2,void(0),"loop");
+var _126_c=new RT.Closure(_126,1,void(0),"some-empty?");
 var _2_c=new RT.Closure(_2,2,void(0),"do-it");
 var _1_c=new RT.Closure(_1,(RT.makeArityAtLeast(1)),void(0),"unknown");
-var _334_c=new RT.Closure(_334,2,void(0),"length-iter");
 var _333_c=new RT.Closure(_333,1,void(0),"unknown");
 var _125_c=new RT.Closure(_125,1,void(0),"all-empty?");
 var _243_c=new RT.Closure(_243,1,void(0),"unknown");
 var _66_c=new RT.Closure(_66,1,void(0),"some-empty?");
-var _3_c=new RT.Closure(_3,2,void(0),"loop");
-var _63_c=new RT.Closure(_63,2,void(0),"do-it");
+var _65_c=new RT.Closure(_65,1,void(0),"all-empty?");
+var _334_c=new RT.Closure(_334,2,void(0),"length-iter");
 var _62_c=new RT.Closure(_62,(RT.makeArityAtLeast(1)),void(0),"unknown");
 var _348_c=new RT.Closure(_348,2,void(0),"append-2");
+var _67_c=new RT.Closure(_67,1,void(0),"first-tuple");
 var _64_c=new RT.Closure(_64,2,void(0),"loop");
-var _65_c=new RT.Closure(_65,1,void(0),"all-empty?");
+var _63_c=new RT.Closure(_63,2,void(0),"do-it");
 var _347_c=new RT.Closure(_347,1,void(0),"append-many");
 var _346_c=new RT.Closure(_346,(RT.makeArityAtLeast(0)),void(0),"unknown");M.params.currentErrorHandler = fail;
 M.params.currentSuccessHandler = success;
