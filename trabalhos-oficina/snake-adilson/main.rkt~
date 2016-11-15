@@ -1,0 +1,31 @@
+
+;Este arquivo é o arquivo principal de onde o programa deve ser chamado.
+;A única modificação que deve ser feita neste arquivo são os nomes finais das funções chamadas
+;dentro do big-bang e o nome final do EstadoMundo. As funções em si devem ser implementadas em "jogo.rkt".
+
+#lang racket
+
+(require 2htdp/universe)
+(require "jogo.rkt")   ;importa as funções definidas em "jogo.rkt" 
+(require "dados.rkt") 
+
+;; Jogo -> Jogo
+;; inicie o mundo com (main JOGO-INICIAL)
+
+;; INTRUÇOES 
+;; Para jogar use as seguintes teclas minúsculas
+;; a - para esquerda
+;; s - para baixo
+;; d - para direita
+;; w - para cima
+;; r - reinicia o jogo
+
+(define (main j)
+  (big-bang j                         ; Jogo (estado inicial do mundo)
+            (on-tick   proximo-jogo)  ; Jogo -> Jogo
+            (to-draw   desenha-jogo)  ; Jogo -> Image
+            (on-key    trata-tecla))) ; Jogo KeyEvent -> Jogo
+
+
+(main JOGO-INICIAL)
+

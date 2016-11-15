@@ -1,0 +1,1 @@
+("6.2" ("df0f040daa485cadf59d78660ef6d3fc95c3eb7a" . "666f77318430725ca6716135bb2de58521be2fd8") (collects #"whalesong" #"lang" #"whalesong.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"whalesong" #"image.rkt") (collects #"whalesong" #"lang" #"reader.rkt"))

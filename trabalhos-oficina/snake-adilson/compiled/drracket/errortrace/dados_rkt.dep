@@ -1,0 +1,1 @@
+("6.2" ("ad364ed2e36a15e9a888dac6c01ecbd211477ac0" . "2b676b643e706610c8e62f3e6be7a115a273ed9f") #"/home/helio/Codigo/helioh2.github.io/trabalhos-oficina/snake-adilson/constantes.rkt" (collects #"whalesong" #"lang" #"whalesong.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"whalesong" #"image.rkt") (collects #"whalesong" #"lang" #"reader.rkt"))

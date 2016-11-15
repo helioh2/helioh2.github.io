@@ -1,0 +1,410 @@
+; Este arquivo deve conter as definições das funções do jogo (com exceção da main).
+; As definições devem incluir assinatura, propósito, protótipo e templates utilizados.
+
+
+#lang racket
+
+(require 2htdp/image)
+(require 2htdp/universe)
+(require math/base)
+(require "constantes.rkt") ;importa as constantes definidas no arquivo "constantes.rkt"
+(require "dados.rkt") ;importa as definições de dados definidas no arquivo "dados.rkt"
+
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
+
+
+
+
+;; Jogo -> Jogo
+;; produz o próximo ...
+;; !!!
+(define (proximo-jogo j) 
+  (local
+    [
+     (define comeu?
+       (< (distancia-euclidiana 
+           (cobra-x (jogo-cobra j)) (cobra-y (jogo-cobra j))
+           (biscoito-x (jogo-biscoito j)) (biscoito-y (jogo-biscoito j)))
+          DIST-COMER))
+          
+     
+     (define colidiu?
+       (or 
+        (<= (cobra-x (jogo-cobra j)) (+ LIM-ESQ 5))
+        (>= (cobra-x (jogo-cobra j)) (- LIM-DIR 5))
+        (<= (cobra-y (jogo-cobra j)) (+ LIM-SUP 5))
+        (>= (cobra-y (jogo-cobra j)) (- LIM-INF 5))
+        (colisao-cobra-cauda (jogo-calda j) (jogo-cobra j))
+        ;(colisao-calda (jogo-cobra j) (jogo-calda j))
+        
+        )
+       )
+     ]
+     
+    (cond
+      
+      [colidiu?
+       (make-jogo 
+        (jogo-cobra j) 
+        (jogo-biscoito j)
+        (jogo-calda j) 
+        (jogo-rota j)        
+        comeu?
+        colidiu? 
+        (jogo-score j))
+       ]
+      
+      [comeu? 
+       (make-jogo 
+        (proxima-cobra (jogo-cobra j)) 
+        (proximo-biscoito (jogo-biscoito j))
+        (cresce-calda (jogo-calda j) (jogo-cobra j) comeu?)
+        
+        (jogo-rota j)
+        comeu?
+        colidiu? 
+        (+ (jogo-score j) INC-PONTOS))
+       ]
+      
+      [else 
+       (make-jogo 
+        (proxima-cobra (jogo-cobra j)) 
+        (jogo-biscoito j)
+        (anda-calda (jogo-calda j) (jogo-cobra j))
+        (jogo-rota j)
+        comeu?
+        colidiu?
+        (jogo-score j))]
+      )
+    )
+  )
+
+
+;; Cauda Cobra -> Boolean
+;; Verifica se a cobra (cabeça) colide com a cauda (corpo)
+
+(define (colisao-cobra-cauda ca co)
+  (local [
+          (define (colisao-cobra-gomo g)
+            (<
+             (distancia-euclidiana (cobra-x g) (cobra-y g)
+                                   (cobra-x co) (cobra-y co))
+             VEL-COB))
+          ]
+  
+  (ormap colisao-cobra-gomo ca)))
+
+
+
+
+;; Calda -> (Cobra-x Calda)
+;; Retorna a posicao x da calda
+;; !!!
+; (define (pos-calda-x ca) 0) ;stub 
+(define (pos-calda-x ca)
+  (cond 
+    [(empty? ca) 0]  
+    [else 
+     ((cobra-x (first ca))
+     (pos-calda-x (rest ca))
+     )
+     ]
+    )
+  )
+
+;; Calda -> (Cobra-x Calda)
+;; Retorna a posicao y da calda
+;; !!!
+; (define (pos-calda-y ca) 0) ;stub 
+(define (pos-calda-y ca)
+  (cond 
+    [(empty? ca) 0]  
+    [else
+     (cobra-y (first ca))
+     (pos-calda-y (rest ca))
+]
+    )
+  )
+
+
+;; Cobra -> Cobra
+;; próxima cobra
+;; !!!
+; (define (proxima-cobra c) 0) ;stub 
+(define (proxima-cobra c)  
+  (cond 
+   
+   [(= (cobra-dir c) 3 ) ;direita
+    (make-cobra 
+     (+ (cobra-x c) VEL-COB) (cobra-y c)  (cobra-dir c))]
+   
+   [(= (cobra-dir c) 9) ;esquerda
+    (make-cobra 
+     (- (cobra-x c) VEL-COB) (cobra-y c)  (cobra-dir c))]
+   
+   [(= (cobra-dir c) 6) ;baixo
+    (make-cobra 
+     (cobra-x c) (+ (cobra-y c) VEL-COB)  (cobra-dir c))]
+   
+   [(= (cobra-dir c) 0) ;cima
+    (make-cobra 
+     (cobra-x c) (- (cobra-y c) VEL-COB)  (cobra-dir c))]   
+   
+   [else c])
+  
+)
+
+;; Cobra -> Calda
+;; próxima calda
+;; !!!
+; (define (proxima-calda ca co) 0) ;stub  
+(define (cresce-calda ca co comeu?); calda cobra 
+    (cons co ca))
+
+  
+;; Cobra -> Calda
+;; cresce calda
+;; !!!
+; (define (cresce-calda c) 0) ;stub  
+(define (anda-calda ca co)
+ 
+  (cond [(empty? ca) empty]
+        [else
+         (local [
+                 (define sem-ultimo (reverse (rest (reverse ca))))
+                 ]
+           (cons co sem-ultimo))]))
+;]
+
+
+
+;)
+;; -> Biscoito
+;; produz o próximo biscoito
+;; !!!
+;(define (proximo-biscoito b) 0); stub
+(define (proximo-biscoito b)
+  (make-biscoito (* 4 (random-integer (+ LIM-ESQ 12) (- (/ LIM-DIR 4) 12)))
+                 (* 4 (random-integer (+ LIM-SUP 12) (- (/ LIM-INF 4) 12))))
+  )
+
+;; Jogo -> Image
+;; desenha ... 
+;; !!!
+(define (desenha-jogo j) 
+  (cond
+    [(jogo-game-over? j)
+      (place-image 
+       (text "GAME OVER" 60 "red") 
+       (/ (- LAR-CEN 9) 2) (-(/ ALT-CEN 2) 20) 
+       
+       (place-image 
+        (text "Press 'r' key to play again..." 20 "slateblue") 
+        (/ (- LAR-CEN 20) 2) (+(/ ALT-CEN 2) 20)
+       
+        (place-image 
+         (text 
+          (string-append "Score: " (number->string (jogo-score j)))
+          20 "blue") (+ LIM-ESQ 50 ) (+ LIM-SUP 20)
+                         
+                          CEN)))
+      ]
+    
+    [else 
+     (place-image 
+      (rectangle TAM-COB TAM-COB "solid" COR-COB)
+      (cobra-x (jogo-cobra j)) (cobra-y (jogo-cobra j))
+   
+      (place-image 
+       (circle RAIO-BIS "solid" COR-BIS)
+       (biscoito-x (jogo-biscoito j)) (biscoito-y (jogo-biscoito j)) 
+                 
+       (place-image 
+        (text 
+         (string-append "Score: " (number->string (jogo-score j)))
+         20 "slateblue") (+ LIM-ESQ 50 ) (+ LIM-SUP 20)
+                         
+                         (place-image
+                          (text 
+                           (string-append 
+                            "( x: " (number->string(cobra-x (jogo-cobra j)))
+                            ", y: " (number->string(cobra-y (jogo-cobra j)))
+                            ", d: " (number->string(cobra-dir (jogo-cobra j)))
+                                           ")") 20 "blue") 400 20 
+                                                                                 ;CEN
+                                                           (desenha-calda (jogo-calda j) CEN)                                                           
+                                                           )
+                         )
+       )
+      )
+     ]
+    )
+  )
+
+(define (desenha-calda ca cen)
+  (cond [(empty? ca) cen]            
+        [else 
+         (place-image 
+          (rectangle TAM-COB TAM-COB "solid" COR-CAL )
+          (faz-calda-x (cobra-x (first ca)) (cobra-dir (first ca)))
+          (faz-calda-y (cobra-y (first ca)) (cobra-dir (first ca)))
+          (desenha-calda (rest ca) cen)
+          )
+         ]
+        )
+  ) 
+   
+(define (faz-calda-x pos dir)
+  (cond 
+    [(= dir 3) pos] ;(- pos 15)]    
+    [(= dir 9) pos] ;(+ pos 15)]
+    
+    [(= dir 0) pos]    
+    [(= dir 6) pos]
+    )
+  )
+  
+(define (faz-calda-y pos dir)
+  (cond 
+    [(= dir 3) pos]    
+    [(= dir 9) pos]
+    
+    [(= dir 0) pos] ; (+ pos 15)]    
+    [(= dir 6) pos] ; (- pos 15)]
+    )
+  )
+
+  
+  
+;;Jogo KeyEvent -> Jogo
+;; quando determinada tecla é pressionada produz ação 
+(define (trata-tecla j ke)
+  (cond 
+
+    [(key=? ke "left")
+     (if  (= (cobra-dir (jogo-cobra j)) 3) j
+     (make-jogo 
+      (make-cobra 
+       (cobra-x (jogo-cobra j))
+       (cobra-y (jogo-cobra j)) 
+       9) 
+      (jogo-biscoito j) 
+      (jogo-calda j)
+      (cria-rota 
+       (jogo-rota j)
+       (make-cobra 
+        (cobra-x (jogo-cobra j)) 
+        (cobra-y (jogo-cobra j))
+        9)
+       ) 
+      #f #f 
+      (jogo-score j)
+      ))
+     ] 
+
+    [(key=? ke "down")
+     (if  (= (cobra-dir (jogo-cobra j)) 0) j
+     (make-jogo 
+      (make-cobra 
+       (cobra-x (jogo-cobra j)) 
+       (cobra-y (jogo-cobra j))
+       6) 
+       (jogo-biscoito j)
+       (jogo-calda j) 
+       (cria-rota 
+        (jogo-rota j)
+        (make-cobra 
+         (cobra-x (jogo-cobra j)) 
+         (cobra-y (jogo-cobra j))
+         6)
+        ) 
+       #f #f
+       (jogo-score j)
+       ))
+     ] 
+    
+    [(key=? ke "right")
+     (if  (= (cobra-dir (jogo-cobra j)) 9) j
+     (make-jogo 
+      (make-cobra 
+       (cobra-x (jogo-cobra j))
+       (cobra-y (jogo-cobra j)) 
+       3) 
+      (jogo-biscoito j)
+      (jogo-calda j)
+      (cria-rota 
+       (jogo-rota j)
+       (make-cobra 
+        (cobra-x (jogo-cobra j)) 
+        (cobra-y (jogo-cobra j))
+        3)
+       ) 
+      #f #f 
+      (jogo-score j)
+      ))
+     ] 
+    
+    [(key=? ke "up")
+     (if  (= (cobra-dir (jogo-cobra j)) 6) j
+     (make-jogo 
+      (make-cobra 
+       (cobra-x (jogo-cobra j)) 
+       (cobra-y (jogo-cobra j))
+       0) 
+      (jogo-biscoito j)
+      (jogo-calda j)
+      (cria-rota 
+       (jogo-rota j)
+       (make-cobra 
+        (cobra-x (jogo-cobra j)) 
+        (cobra-y (jogo-cobra j))
+        0)
+       ) 
+      #f #f 
+      (jogo-score j)
+      ))
+     ] 
+    
+    [(key=? ke "r")
+     (make-jogo 
+      COBRA-INICIAL 
+      BISC-INICIAL 
+      empty 
+      (jogo-rota j)
+      #f #f 
+      0
+      )
+     ]
+    
+    [else j]
+    )
+  )  
+
+
+(define (cria-rota ro co)
+  (reverse (cons co (reverse ro)))   
+  )
+
+
+;; Numero, Numero, Numero, Numero -> Numero
+;; retorna a distancia entre os dois pontos 
+;; (define (soma-cartesiana x y) (+ (dobro x) (dobro y))
+(define (distancia-euclidiana x1 y1 x2 y2)
+  (local 
+    [(define (quadrado x)
+      (* x x ))]
+  (sqrt ( + (quadrado (- x2 x1)) (quadrado (- y2 y1))))))
+
+
+
+
+
+
+;///// main para testes
+(define (main j)
+  (big-bang j                         ; Jogo (estado inicial do mundo)
+            (on-tick   proximo-jogo)  ; Jogo -> Jogo
+            (to-draw   desenha-jogo)  ; Jogo -> Image
+            (on-key    trata-tecla))) ; Jogo KeyEvent -> Jogo
+
+(main JOGO-INICIAL)

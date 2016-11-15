@@ -1,0 +1,12 @@
+CACHE MANIFEST
+## Timestamp: Monday, November 14th, 2016 11:41:32pm
+jogo.js
+jogo_1.js
+optimer-normal-normal.js
+canvas.text.js
+excanvas.js
+jogo-module-manifest.js
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*

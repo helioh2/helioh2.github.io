@@ -1,0 +1,70 @@
+#lang racket
+
+
+;; Arquivo para definição dos tipos de dados do programa.
+
+
+(require 2htdp/image)
+;inclua outros pacotes ou arquivos necessários usando (require ...)
+(require "constantes.rkt")
+
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
+
+
+;; =================
+;; Definições de dados:
+
+;; EstadoMundo é ... (dê um nome melhor para EstadoMundo)
+;; TESTE DE COMMIT DO USUARIO adilsoncosta
+
+
+(define-struct cobra (x y dir)  #:transparent)
+
+;;Cobra é (make-cobra Numero Numero Numero[O,3,6,9])
+;;Interpretação: A estrutura representa a cobrinha com sua posicao x e y no cenario, sua direção e o score do jogo
+;;Exemplos:
+(define COBRA-INICIAL (make-cobra POS-X-COB-INI POS-Y-COB-INI 3))
+(define COBRA-FINAL (make-cobra LAR-CEN 0 9))
+(define COBRA-CENTRO (make-cobra (/ LAR-CEN 2) (/ ALT-CEN 2) 6))
+#;
+(define (fn-para-cobra cob)
+  (... (cobra-x cob) 
+       (cobra-y cob)
+       (cobra-dir cob)))
+
+;(define calda '())
+(define calda (list(cobra 300 200 3)))
+;(define calda (list COBRA-INICIAL))
+;(define calda (list (make-cobra (- POS-X-COB-INI 20) POS-Y-COB-INI 3)))
+ 
+(define rota '())
+
+(define-struct biscoito (x y)  #:transparent)
+;;Biscoito é (make-biscoito Numero Numero)
+;;Interpretação: A estrutura representa a posicao x y no cenario, em que o biscoito aparece
+;;Exemplos:
+(define BISC-INICIAL (make-biscoito 400 250))
+(define BISC-1 (make-biscoito 50 100))
+(define BISC-2 (make-biscoito 600 300))
+#;
+(define (fn-para-biscoito bisc)
+  (... (biscoito-x bisc) 
+       (biscoito-y bisc)))
+
+
+
+(define-struct jogo (cobra biscoito calda rota comeu? game-over? score) #:transparent)
+;; Jogo é (make-jogo Cobra Biscoito Calda Boolean Score)
+;; interp. um jogo composto pela cobra (personagem), o biscoito (pontos), a calda (inimigo),
+;; uma flag que indica se comeu, outro que indica se o jogo acabou (game over), e a pontuacao
+;; Exemplos
+(define JOGO-INICIAL (make-jogo COBRA-INICIAL BISC-INICIAL empty rota #f #f 0))
+(define JOGO-TESTE (make-jogo COBRA-FINAL BISC-INICIAL calda rota #f #f 0))
+#;
+(define (fn-para-jogo j)
+  (... (jogo-cobra j)
+       (jogo-biscoito j)
+       (jogo-calda j)
+       (jogo-comeu? j)
+       (jogo-acabou? j)
+       (jogo-score j)))
