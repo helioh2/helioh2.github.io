@@ -1,0 +1,1 @@
+("6.2" ("3f94c509cbb412ccd6e9fb67b4890cd3f9e862c6" . "28acf32b3dfa7775658677544030eec40a1f3e45") #"/home/helio/Codigo/trabalho-racket-corrida/constantes.rkt" (collects #"whalesong" #"lang" #"whalesong.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"whalesong" #"world.rkt") (collects #"whalesong" #"image.rkt") (collects #"whalesong" #"lang" #"reader.rkt"))
