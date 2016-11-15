@@ -1,289 +1,118 @@
+<!DOCTYPE html>
+<html manifest="Trabalho Jogo Space Invaders.appcache">
+  <head>
+    <meta http-equiv='X-UA-Compatible' content='IE=7,chrome=1'><!--[if lt IE 9]><script src='excanvas.js' type='text/javascript'></script><script src='canvas.text.js'></script><script src='optimer-normal-normal.js'></script><![endif]-->
+    <meta name="viewport" content="initial-scale=1.0, width=device-width, height=device-height, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta charset="utf-8"/>
+    <title>Trabalho Jogo Space Invaders</title>
 
-#lang whalesong
+  <script src='Trabalho Jogo Space Invaders.js'></script>
+  <script src='Trabalho Jogo Space Invaders_1.js'></script>
 
-(require whalesong/image)
-(require whalesong/world)
+  <script>
+     plt.runtime.currentModuleLoader = plt.runtime.makeLocalFileModuleLoader({});
+  </script>
+  <script>
+  var invokeMainModule = function() {
+    var M = plt.runtime.currentMachine;
+    var startTime = new Date().valueOf();
+    plt.runtime.invokeMains(
+        M,
+        function() {
+            // On main module invokation success:
+            var stopTime = new Date().valueOf();                                
+            if (window.console && window.console.log) {
+                window.console.log('evaluation took ' + (stopTime - startTime) + ' milliseconds');
+            }
+        },
+        function(e) {
+            var contMarkSet, context, i, appName, contextDiv, srclocProcedure;
 
-;; Jogo em versão simplificada do antigo console Atari Space Invaders.
-;; Score não foi implementado.
-;; Movimento abrir/fechar dos aliens não foi implementado.
-
-;; =================
-;; Constantes:
-
-(define LARGURA 500)               ; Largura da cena do jogo 
-(define ALTURA 500)                ; Altura da cena do jogo
-(define TIRO_DIST 5)               ; A distância percorrida entre tiros
-(define TAMANHO-DO-ALIEN 10)       ; Tamanho do alien é igual a do canhão e serve para definir colisão com tiro e parede lateral  
-(define DISTANCIA-ENTRE-ALIENS 60) ; Distância entre os aliens (lista de aliens na coordenada y) 
-(define MAX-TIROS 2)               ; Número máximo de tiros na tela em cada disparo
-(define RATE 0.01)                 ; Rate do "on-tick" na função BigBang
-(define CENA-DE-BATALHA (rectangle LARGURA ALTURA "solid" "black")) ; Espaço onde a batalha acontece
-
-(define IMG-ALIEN-FECHADO (scale 0.75 (bitmap/url "alien-fechado.png")))
-(define IMG-ALIEN-ABERTO (scale 0.80  (bitmap/url "alien-aberto.png")))
-
-(define IMG-CANHAO (scale 1.0  (bitmap/url "canhao.png")))
-
-(define MISSIL (ellipse 3.5 17 "solid" "white"))
-
-;; =================
-;; Data definitions:
-
-(define-struct alien (x y direcao) #:transparent)
-(define-struct tiro (x y) #:transparent )
-(define-struct tank (x y) #:transparent)
-(define-struct jogo (aliens tank tiros))
-                  
-; Posição inicial no jogo com o Canhão no centro da tela 
-(define TANK (make-tank (/ LARGURA 2) (- ALTURA (* TAMANHO-DO-ALIEN 2))))
-
-; Cria uma coluna de aliens na cordenada y
-; Integer aliens -> aliens
-(define (make-aliens-y y-cord aliens)
-  (cond ((empty? aliens) (make-aliens-y y-cord  
-                                        (cons (make-alien 20 y-cord 1) aliens)))
-        ((> (+ (alien-x (first aliens)) DISTANCIA-ENTRE-ALIENS) LARGURA) aliens)
-        (else               (make-aliens-y y-cord 
-                               (cons  (make-alien (+ (alien-x (first aliens)) 
-                                           DISTANCIA-ENTRE-ALIENS) y-cord 1) aliens )))))
-
-; Cria uma sequencia de colunas de aliens
-; Integer aliens -> aliens
-(define (make-aliens colunas aliens)
-  (cond ((= 0 colunas) aliens)
-        (else (make-aliens (- colunas 1) 
-                         (append aliens (make-aliens-y (- ( * colunas 60) 30) 
-                                                       empty))))))
-
-;; =================
-;; Funções:
-
-; Desenha a imagem para o score do jogo.... (Tentei implementar mas sem sucesso!)
-; Score -> image
-(define (desenha-score score)
-  (place-image (text (string-append "score: " (number->string 0000)) 12 "white") 300 15 CENA-DE-BATALHA))
-
-#;
-(define (fn-for-tank cena)
-  (... cena))  
-  
-; Desenha a imagem do tank 
-; tank, cena -> cena
-(define (desenha-tank tank cena) 
-  (place-image IMG-CANHAO (tank-x tank) (tank-y tank) cena))
-
-; Desenha o tiro na cena de batalha 
-; tiro, cena -> cena
-(define (desenha-tiro tiro cena)
-   (place-image/align MISSIL (tiro-x tiro) (tiro-y tiro) "left" "bottom" cena))
-
-#;
-(define (fn-for-lti lti cena)
-  (cond [(empty? lti) (...)]                        ; Condição de parada
-        [else (... (first lti)                      ; Tiro
-                   (fn-for-lti (rest lti) cena))])) ; Recursão em cauda
-
-; Desenha uma sequencia (lista) de tiros
-(define (desenha-tiros tiros cena)
-  (cond ((empty? tiros) cena)
-        (else (desenha-tiro (first tiros) 
-                           (desenha-tiros (rest tiros) cena)))))
-
-; Movimenta os tiros
-; Se o tiro ultrapassar a parte superior da cena é removido para não retornar em baixo
-(define (move-tiros tiros)
-  (cond ((empty? tiros) tiros)
-        (else  (cond ((> 0 (tiro-y (first tiros))) 
-                         (move-tiros (rest tiros)))
-                     (else
-                         (cons (move-tiro (first tiros))
-                               (move-tiros (rest tiros))))))))
-
-; Movimenta os tiros
-(define (move-tiro tiro)
-  (make-tiro (tiro-x tiro) (- (tiro-y tiro) TIRO_DIST)))
-
-#;
-(define (fn-for-lda lda cena)
-  (cond [(empty? lda) (...)]                        ; Condição de parada
-        [else (... (first lda)                      ; Alien
-                   (fn-for-lda (rest lda) cena))])) ; Recursão em cauda
-                               
-; Desenha a lista de aliens na cena
-; aliens Scene -> Scene
-
-;(define (desenha-aliens aliens cena)
-;  (cond ((empty? aliens)  cena)
-;        (else (desenha-alien (first aliens) (desenha-aliens (rest aliens) cena)))))
-
-(define (desenha-aliens aliens cena) 
-  (cond ((empty? aliens)  cena)
-   (else (place-image (escolher-alien (first aliens))     
-                           (alien-x (first aliens))
-                           (alien-y (first aliens))  
-                   (desenha-aliens (rest aliens) cena)))))                     
-           
-(define (escolher-alien a)
-  (if (alien? a)              ; Utilizado na tentativa de fazer os aliens abrir e fechar (sem sucesso!)
-      IMG-ALIEN-FECHADO           
-      IMG-ALIEN-ABERTO))
+            var displayContext = function() {
+                var subcontextDiv = $('<div/>').css('color', 'red');
+                subcontextDiv.append("Stacktrace:\n");
+                if (contMarkSet) {
+                    context = contMarkSet.getContext(M);
+                    for (i = 0; i < context.length; i++) {
+                        if (plt.runtime.isVector(context[i])) {
+                                $('<div/>').text('at ' + context[i].elts[0] +
+                                                 ', line ' + context[i].elts[2] +
+                                                 ', column ' + context[i].elts[3])
+                                    .addClass('stacktrace')
+                                    .css('margin-left', '10px')
+                                    .css('whitespace', 'pre')
+                                    .appendTo(subcontextDiv);
+                        } else if (plt.runtime.isProcedure(context[i])) {
+                            if (context[i].displayName) {
+                                $('<div/>').text('in ' + context[i].displayName)
+                                        .addClass('stacktrace')
+                                        .css('margin-left', '10px')
+                                        .css('whitespace', 'pre')
+                                        .appendTo(subcontextDiv);
+                            }
+                        }                                     
+                    }
+                }
+                contextDiv.append(subcontextDiv);
+                M.params.currentErrorDisplayer(M, contextDiv);
+            };
 
 
-; Desenha o jogo na cena da batalha
-; jogo -> Scene
-(define (render-scene jogo)
-  (desenha-aliens (jogo-aliens jogo)
-             (desenha-tank (jogo-tank jogo)
-                        (desenha-tiros (jogo-tiros jogo)
-                                      CENA-DE-BATALHA))))
+            // On main module invokation failure
+            if (window.console && window.console.log) {
+                window.console.log(e.stack || e);
+            }
+            
+            M.params.currentErrorDisplayer(
+                M, $(plt.baselib.format.toDomNode(e.stack || e)).css('color', 'red'));
 
-; Movimenta os aliens de acordo com a direção da lista 
-; Quando encontra o limite lateral da cena a direção é invertida 
-; alien -> alien
-(define (proximo-alien alien)
-  (proximo-alien-x  alien) (alien-direcao alien) LARGURA   
-  (cond ((> 10 (proximo-alien-x alien))  (muda-direcao-alien alien))
-        ((< (- LARGURA 10) (proximo-alien-x  alien)) (muda-direcao-alien alien))
-        (else    (make-alien (proximo-alien-x  alien) 
-                           (alien-y alien) (alien-direcao alien)))))
+            if (Object.hasOwnProperty.call(e,'racketError') &&
+                plt.baselib.exceptions.isExn(e.racketError)) {
+                contMarkSet = plt.baselib.exceptions.exnContMarks(e.racketError);
+                contextDiv = $('<div/>');
 
-; Retorna um alien mas com a direção trocada
-; alien -> alien
-(define (muda-direcao-alien alien)
-  (make-alien (alien-x alien) (+ (alien-y alien) 30) (* -1 (alien-direcao alien))))
-                                                             
-; Movimenta cada alien no intervalo de tempo
-(define (proximos-aliens aliens)
-  (cond ((empty? aliens) aliens)
-        (else (cons (proximo-alien (first aliens)) (proximos-aliens (rest aliens))))))
-
-; Movimenta o tank para esquerda ou direita e limita a colisão com as paredes esq/dir
-; tank direcao -> tank
-(define (move-tank tank direcao)
-  (cond ((> 20 (proximo-tank-x direcao tank))  tank)
-        ((< (- LARGURA 20) (proximo-tank-x direcao tank))  tank)
-        (else  (make-tank (proximo-tank-x direcao tank) (tank-y tank) ))))
-
-; Aliem e tanque possuem o mesmo tamanho!
-; Usados para determinarem a colisão com as paredes esquerda e direita
-; Integer Tank -> Integer
-(define (proximo-tank-x direcao tank)
-  (+ (* TAMANHO-DO-ALIEN direcao) (tank-x tank) ))
-
-(define (proximo-alien-x  alien)
-   (+ (* 1 (alien-direcao alien)) (alien-x alien) ))
-
-; Dispara um tiro e retorna nova lista de tiros
-; MAX-TIROS define quantos tiros aparecerão na tela em cada disparo
-; jogo -> tiros
-(define (fire-tank jogo)
-  (cond ((eq? MAX-TIROS (length (jogo-tiros jogo))) (jogo-tiros jogo))
-        (else
-         (cons (make-tiro (tank-x (jogo-tank jogo) )
-                     (tank-y (jogo-tank jogo) )) (jogo-tiros jogo) ))))
-
-#;
-(define (handle-key jogo ke)
-  (cond [(key=? ke " ") (... ws)]
-        [else 
-         (... jogo)]))  
-  
-; Definições das funções do teclado
-; Left - Movimenta o tank para esquerda
-; Right - Movimenta o tank para a direita
-; Space - Disparo do míssil
-(define (handle-key-events jogo ke)
-  (make-jogo (jogo-aliens jogo)
-              (cond
-                [(string=? "left" ke)  (move-tank (jogo-tank jogo) -1)]
-                [(string=? "right" ke) (move-tank (jogo-tank jogo) 1) ]
-                [else (jogo-tank jogo)])
-              (cond
-                [(key=? " " ke)  (fire-tank jogo)]
-                [else (jogo-tiros jogo)]
-              )))
-
-; Detecta colisão entre tiros e aliens e retorna true se houve uma colisão
-; alien, tiros -> boolean
-(define (colide? alien tiros)
-  (cond ((empty? tiros) false)
-        ((colisao-tiro-alien?  (first tiros) alien) true)
-        (else (colide? alien (rest tiros)))))
-
-; Função auxiliar para verificar se um número se encontra dentro de um intervalo (Utilizada para detectar colisão).
-; Integer, Integr, Integer -> Boolean
-(define (between? x low high)
-  (cond ((and (> x low) (< x high) true))
-        (else false)))
-
-; Detecta se houve uma colisão entre um tiro e um alien 
-; alien, tiro -> boolean
-(define (colisao-tiro-alien?  tiro alien)
-  (cond ((and (between? (tiro-x tiro) (- (alien-x alien) TAMANHO-DO-ALIEN 5) 
-                                          (+ (alien-x alien) TAMANHO-DO-ALIEN 5))
-              (between? (tiro-y tiro) (- (alien-y alien) TAMANHO-DO-ALIEN 5)
-                                          (+ (alien-y alien) TAMANHO-DO-ALIEN 5)))
-               true)
-        (else false)))
-
-; Remove da lista qualquer alien que colidiu com um tiro
-; aliens, tiros -> aliens
-(define (tiro-colisao-aliens aliens tiros)
-  (cond ((empty? aliens) aliens)
-        (else (cond ((colide? (first aliens) tiros) 
-                               (tiro-colisao-aliens (rest aliens) tiros))
-                    (else (cons (first aliens) 
-                                (tiro-colisao-aliens (rest aliens) tiros)))))))                                                  
-
-; Em cada tick de clock processa o jogo...
-(define (progress-jogo jogo)
-  (make-jogo 
-            (tiro-colisao-aliens (proximos-aliens (jogo-aliens jogo)) 
-               (jogo-tiros  jogo))
-                   (jogo-tank jogo)
-                      (move-tiros (jogo-tiros jogo))))
-
-; Função big bang 
-(define (space-invaders-main RATE)
-  (big-bang (make-jogo (make-aliens 3 empty ) TANK empty)      
-            (on-key     handle-key-events)
-            (on-tick    progress-jogo RATE)
-            (to-draw   render-scene)))
-
-(space-invaders-main 0.01)
-
-
-;; =================
-;; Testes:
-
-; Teste de troca de direção do alien
-(check-expect (muda-direcao-alien (make-alien 10 10 1)) (make-alien 10 40 -1))
-
-; Teste de movimento dos tiros
-(check-expect (move-tiro (make-tiro 50 50)) (make-tiro 50 (- 50 TIRO_DIST)))
-
-; Testa a movimentação da lista de tiros
-(check-expect (move-tiros (list (make-tiro 100 100) (make-tiro 90 100)))
-              (list (make-tiro 100 (- 100 TIRO_DIST))
-                    (make-tiro 90 (- 100 TIRO_DIST))))
-
-; Teste da Função auxiliar "between" 
-(check-expect (between? 50 10 100) true)
-(check-expect (between? 10 50 100) false)
-
-; Verifica se aliens se movimento da esquerda para a direita dentro do esperado
-(check-expect (proximo-alien (make-alien 10 10 1)) (make-alien 11 10 1))
-(check-expect (proximo-alien (make-alien 20 10 -1)) (make-alien 19 10 -1))
-
-; Verifica se muda de direção ao bater na lateral da cena
-(check-expect (proximo-alien (make-alien LARGURA 10 1)) (make-alien LARGURA 40 -1))
-
-; Verifica se os aliens mudam de direção para esquerda e direita
-(check-expect (muda-direcao-alien (make-alien 10 10 1)) (make-alien 10 40 -1))
-(check-expect (muda-direcao-alien (make-alien 10 10 -1)) (make-alien 10 40 1))
-
-
-
-
-
+                if (e.racketError.structType &&
+                    plt.baselib.structs.supportsStructureTypeProperty(
+                        e.racketError.structType,
+                        plt.baselib.structs.propExnSrcloc)) {
+                    srclocProcedure = plt.baselib.functions.asJavaScriptFunction(
+                              plt.baselib.structs.lookupStructureTypeProperty(
+                                  e.racketError.structType,
+                                  plt.baselib.structs.propExnSrcloc),
+                              M);
+                    srclocProcedure(function(v) {
+                                        if (plt.baselib.lists.isList(v)) {
+                                            while(v !== plt.baselib.lists.EMPTY) {
+                                                if (plt.baselib.srclocs.isSrcloc(v.first)) {
+                                                    $('<div/>').text('at ' + plt.baselib.srclocs.srclocSource(v.first) +
+                                                                     ', line ' + plt.baselib.srclocs.srclocLine(v.first) +
+                                                                     ', column ' + plt.baselib.srclocs.srclocColumn(v.first))
+                                                               .addClass('srcloc')
+                                                               .css('margin-left', '10px')
+                                                               .css('whitespace', 'pre')
+                                                               .css('color', 'red')
+                                                               .appendTo(contextDiv);
+                                                }
+                                                v = v.rest;
+                                            }
+                                        }
+                                        displayContext();
+                                    },
+                                    function(err) {
+                                        displayContext();
+                                    },
+                                    e.racketError);
+                } else {
+                    displayContext();
+                }
+            }
+        });
+};
+  $(document).ready(invokeMainModule);
+  </script>
+  </head>
+  <body>
+  </body>
+  </html>
