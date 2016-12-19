@@ -1,0 +1,1 @@
+("6.2" ("66df4897dfda51b337a3fc9c74abb816a9ad4b38" . "03495853999fdcd87e26b6ebaf85d84c2a5d5762") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"2htdp" #"image.rkt"))
