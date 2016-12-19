@@ -1,0 +1,75 @@
+#lang racket
+
+
+;; Arquivo para definição dos tipos de dados do programa.
+
+
+(require 2htdp/image)
+;inclua outros pacotes ou arquivos necessários usando (require ...)
+(require "constantes.rkt")
+(provide (all-defined-out)) ;permite que outros arquivos importem deste
+
+
+;; =================
+;; Definições de dados:
+;; atirador é (make-atirador Natural Natural)
+;; interp. representa o atirador que está numa posição x
+;; da tela e anda a uma velocidade dx 
+
+(define-struct atirador(x dx y))
+(define atirador1(make-atirador 300 VELOCIDADE-ATIRADOR Y-ATIRADOR))
+(define atirador2(make-atirador 200 VELOCIDADE-ATIRADOR Y-ATIRADOR))
+#;
+(define (fn-para-atirador a)
+  (... (atirador-x a) (atirador-dx a))
+  )
+
+;; Tiro é (make-tiro Natural Inteiro Natural)
+;; interp. um tiro que apenas na vertical
+(define-struct tiro(y dy x))
+(define tiro1(make-tiro 350 5 100))
+(define tiro2(make-tiro 300 5 50))
+(define tiro3(make-tiro 200 5 150))
+(define tiro4(make-tiro -50 0 300))
+#;
+(define (fn-para-tiro t)
+  (... (tiro-y t) (tiro-dy t) (tiro-x t))
+  )
+;; Lista de tiros é uma dessas
+;; empty
+(define lista_tiros (list tiro1))
+(define lista_tiros1 empty)
+
+
+;; alvo é (make-alvo numero, numero)
+(define-struct alvo (x y fantasia))
+(define ALVO1 (make-alvo 50 MEIO-Y 1))
+(define ALVO2 (make-alvo MEIO-X 100 2))
+(define ALVO3 (make-alvo 200 80 3))
+
+#;
+(define (fn-para-alvo a)
+  (... (alvo-x a) (alvo-y a) (alvo-fantasia a)))
+
+;; alvos é empty ....
+(define lista1-alvos empty)
+(define lista2-alvos (cons ALVO1 empty))
+(define lista3-alvos (cons ALVO2 lista2-alvos))
+
+
+
+;;Jogo é (make-jogo Atirador Tiro)
+;; interp. representa um jogo que tem um atirador e um tiro
+(define-struct jogo (atirador l_tiros lista-alvo tspawn game-over? ))
+(define jogo1 (make-jogo atirador1 lista_tiros1 lista2-alvos 2 #false))
+(define jogo2 (make-jogo atirador2 lista_tiros1 lista3-alvos 1 #false))
+(define jogo3 (make-jogo atirador1 lista_tiros1 lista2-alvos 3 #false))
+(define jogo4 (make-jogo atirador1 lista_tiros1 lista3-alvos 3 #false))
+
+
+#;
+(define (fn-para-jogo j)
+  (... (jogo-atirador j) (jogo-tiro j)(jogo-alvo j)(jogo-tspawn j)(jogo-game-over? j))
+  )
+
+
