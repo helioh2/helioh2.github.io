@@ -1,0 +1,1 @@
+("6.7" ("ca3e9613b5774d70bfb4dd53f41aa0c97e643c6e" . "0332e725e688b8ab2a021d9e605d3b70cb03b207") (collects #"2htdp" #"image.rkt") (collects #"2htdp" #"universe.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"list.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"rackunit" #"main.rkt"))

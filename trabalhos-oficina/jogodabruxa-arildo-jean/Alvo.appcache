@@ -1,0 +1,12 @@
+CACHE MANIFEST
+## Timestamp: Monday, December 19th, 2016 7:13:24pm
+Alvo.js
+Alvo_1.js
+optimer-normal-normal.js
+canvas.text.js
+excanvas.js
+Alvo-module-manifest.js
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*
