@@ -1,0 +1,12 @@
+CACHE MANIFEST
+## Timestamp: Tuesday, December 20th, 2016 6:23:06pm
+marioplatconstante.js
+marioplatconstante_1.js
+optimer-normal-normal.js
+canvas.text.js
+excanvas.js
+marioplatconstante-module-manifest.js
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*

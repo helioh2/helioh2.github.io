@@ -1,0 +1,12 @@
+CACHE MANIFEST
+## Timestamp: Tuesday, December 20th, 2016 6:02:29pm
+bustamove.js
+bustamove_1.js
+optimer-normal-normal.js
+canvas.text.js
+excanvas.js
+bustamove-module-manifest.js
+
+# All other resources (e.g. sites) require the user to be online.
+NETWORK:
+*
