@@ -24,7 +24,7 @@ goog.require('BlocklyGames.html');
  */
 Turtle.html.start = function(ij) {
   return `
-${BlocklyGames.html.headerBar(ij, BlocklyGames.getMsg('Games.turtle', true), '', true, true, '')}
+${BlocklyGames.html.headerBar(ij, BlocklyGames.getMsg('Games.turtle', true), '', true, false, '')}
 
 <div id="visualization">
   <canvas id="scratch" width=400 height=400 style="display: none"></canvas>
@@ -114,6 +114,8 @@ ${BlocklyGames.html.abortDialog()}
 ${BlocklyGames.html.storageDialog()}
 
 ${Turtle.html.helpDialogs_(ij.level, ij.html)}
+
+<footer><img src="common/logo_built_on.png" alt="Built on Blockly" width="7%"></footer>
 
 `;
 };
