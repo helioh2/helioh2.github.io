@@ -140,17 +140,19 @@ Turtle.Blocks.init = function() {
     // Block for go to.
     {
       "type": "turtle_goto",
-      "message0": BlocklyGames.getMsg('Turtle.goto', false)+"%1%2",
+      "message0": BlocklyGames.getMsg('Turtle.goto', false)+"    x %1 y %2",
       "args0": [
         {
           "type": "input_value",
           "name": "VALUE_X",
           "check": "Number",
+          "align": "RIGHT"
         },
         {
           "type": "input_value",
           "name": "VALUE_Y",
           "check": "Number",
+          "align": "RIGHT"
         },
       ],
       "previousStatement": null,

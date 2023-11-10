@@ -55,7 +55,7 @@ if (location.host === 'blockly-games.appspot.com') {
 
   var debug = false;
   try {
-    debug = !!sessionStorage.getItem('debug');
+    // debug = !!sessionStorage.getItem('debug');
     if (debug) {
       console.info('Loading uncompressed JavaScript.');
     }

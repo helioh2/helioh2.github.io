@@ -608,6 +608,11 @@ function move(distance, opt_id) {
   const timeStep = totalTime / n;
   pause = totalTime + timeStep;
 
+  if (isPenDown) {
+    ctxScratch.beginPath();
+    ctxScratch.moveTo(turtleX, turtleY);
+  }
+
   let count = 0;
 
   let time = 0.0;
